@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Naecitu · Seven Mixto · Club San Fernando</title>
+<meta name="description" content="Torneo de hockey seven mixto en Club San Fernando. Inscripción de equipos, entradas para la fiesta, fixture y resultados.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Naecitu · Seven Mixto">
+<meta property="og:description" content="Sábado 5 de diciembre · Club San Fernando. Inscribí tu equipo y comprá tus entradas para la fiesta.">
+<meta property="og:image" content="https://joaquinfsanturio13.github.io/naecitu/logo.png">
+<meta property="og:url" content="https://joaquinfsanturio13.github.io/naecitu/">
+<meta name="theme-color" content="#173c6f">
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --azul:#173c6f; --azul2:#22528f; --verde:#2e8139; --oliva:#92a83a; --salvia:#d5ddbd; --crema:#f4f6ec;
+  --tinta:#132238; --gris:#5d6b7c; --linea:#d9dfd0; --blanco:#fff; --rojo:#b3361f; --ambar:#c98a12;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Barlow',system-ui,sans-serif;background:var(--crema);color:var(--tinta);font-size:16px;line-height:1.45}
+h1,h2,h3,.disp{font-family:'Bangers',cursive;letter-spacing:.04em;font-weight:400;color:var(--azul);margin:0}
+button,input,select,textarea{font:inherit}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px}
+
+/* header */
+header{background:var(--azul);color:#fff;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;left:-10%;right:-10%;bottom:-38px;height:70px;background:var(--crema);border-radius:50% 50% 0 0}
+.hero{display:flex;align-items:center;gap:18px;padding:18px 0 46px;position:relative;z-index:1}
+.hero img{width:96px;height:auto;flex:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.25))}
+.hero h1{color:#fff;font-size:44px;line-height:.95}
+.hero .sub{color:var(--salvia);font-weight:600;margin-top:4px}
+.hero .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:3px 10px;border-radius:999px;font-size:13px;font-weight:600}
+
+/* tabs */
+nav{position:sticky;top:0;z-index:5;background:var(--crema);border-bottom:1px solid var(--linea)}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding:8px 0}
+.tabs::-webkit-scrollbar{display:none}
+.tab{border:0;background:transparent;color:var(--gris);font-weight:700;padding:8px 14px;border-radius:999px;white-space:nowrap;cursor:pointer}
+.tab[aria-selected=true]{background:var(--azul);color:#fff}
+.tab.cta{color:var(--verde)}
+.tab.cta[aria-selected=true]{background:var(--verde);color:#fff}
+
+main{padding:18px 0 60px}
+section[hidden]{display:none}
+.card{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--r);padding:16px;margin-bottom:14px}
+.card h2{font-size:26px;margin-bottom:8px}
+.card h3{font-size:20px;margin-bottom:6px}
+.muted{color:var(--gris)}
+.small{font-size:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grow{flex:1 1 180px}
+.btn{border:0;border-radius:10px;background:var(--azul);color:#fff;font-weight:700;padding:10px 16px;cursor:pointer}
+.btn:hover{background:var(--azul2)}
+.btn.verde{background:var(--verde)}
+.btn.ghost{background:transparent;color:var(--azul);border:1.5px solid var(--azul)}
+.btn.sm{padding:6px 10px;font-size:14px}
+.btn.rojo{background:var(--rojo)}
+.btn:disabled{opacity:.5;cursor:default}
+
+/* pago */
+.pago{background:linear-gradient(135deg,var(--verde),#3d9a49);color:#fff;border:0}
+.pago h2{color:#fff}
+.pago .alias{font-family:'Bangers';font-size:30px;letter-spacing:.06em;word-break:break-all}
+.pago .monto{font-size:22px;font-weight:700}
+.pago .cvu{font-weight:700;font-size:16px;letter-spacing:.03em;word-break:break-all}
+.pago .btn{background:#fff;color:var(--verde)}
+
+/* avisos */
+.aviso{border-left:4px solid var(--oliva)}
+.aviso.fijo{border-left-color:var(--azul)}
+.aviso .fecha{font-size:13px;color:var(--gris)}
+.aviso p{margin:6px 0 0;white-space:pre-wrap}
+
+/* form */
+label{display:block;font-weight:600;font-size:14px;margin:10px 0 4px}
+input[type=text],input[type=tel],input[type=email],input[type=number],input[type=time],input[type=date],input[type=password],select,textarea{
+  width:100%;padding:10px 12px;border:1.5px solid var(--linea);border-radius:10px;background:#fff;color:var(--tinta)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--azul)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+@media(max-width:560px){.grid2{grid-template-columns:1fr}}
+.jug{display:grid;grid-template-columns:28px 1fr 92px 32px;gap:8px;align-items:center;margin-bottom:6px}
+.jug .n{color:var(--gris);font-weight:700;text-align:right}
+.sexo{display:flex;border:1.5px solid var(--linea);border-radius:10px;overflow:hidden}
+.sexo button{flex:1;border:0;background:#fff;padding:9px 0;font-weight:700;color:var(--gris);cursor:pointer}
+.sexo button.on.F{background:var(--oliva);color:#fff}
+.sexo button.on.M{background:var(--azul);color:#fff}
+.x{border:0;background:transparent;color:var(--gris);font-size:20px;cursor:pointer}
+.contador{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.contador span{font-size:13px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--salvia)}
+.contador span.ok{background:#dcefd9;color:var(--verde)}
+.contador span.mal{background:#f6dfd9;color:var(--rojo)}
+.msg{padding:12px 14px;border-radius:10px;font-weight:600;margin-top:12px}
+.msg.ok{background:#dcefd9;color:#1d5a26}
+.msg.err{background:#f6dfd9;color:var(--rojo)}
+.check{display:flex;gap:8px;align-items:flex-start;font-weight:500;margin-top:12px}
+
+/* tablas */
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--gris);text-align:center;padding:6px 4px;border-bottom:2px solid var(--linea)}
+th:nth-child(2),td:nth-child(2){text-align:left}
+td{padding:8px 4px;text-align:center;border-bottom:1px solid var(--linea);font-variant-numeric:tabular-nums}
+tr.clasif td:first-child{color:var(--verde);font-weight:700}
+td.pts{font-weight:700;color:var(--azul)}
+.scroll{overflow-x:auto}
+
+/* fixture */
+.turno{margin-bottom:12px}
+.turno-h{display:flex;align-items:baseline;gap:10px;margin:14px 0 6px}
+.turno-h .hora{font-family:'Bangers';font-size:24px;color:var(--azul);letter-spacing:.05em}
+.turno-h .fase{font-size:13px;font-weight:700;color:var(--gris);text-transform:uppercase;letter-spacing:.05em}
+.partido{display:grid;grid-template-columns:62px 1fr auto 1fr;gap:8px;align-items:center;background:#fff;border:1px solid var(--linea);border-radius:12px;padding:10px 12px;margin-bottom:6px}
+.partido .cancha{font-size:12px;font-weight:700;color:var(--gris);text-transform:uppercase;line-height:1.1}
+.partido .cancha b{display:block;font-size:11px;color:var(--oliva)}
+.partido .eq{font-weight:700}
+.partido .eq.v{text-align:right}
+.partido .eq.lab{color:var(--gris);font-weight:500;font-style:italic}
+.partido .eq.gana{color:var(--verde)}
+.partido .res{font-family:'Bangers';font-size:22px;color:var(--azul);min-width:64px;text-align:center;letter-spacing:.05em}
+.partido .res.vs{font-family:'Barlow';font-size:13px;color:var(--gris);font-weight:700}
+.partido .pen{display:block;font-family:'Barlow';font-size:11px;color:var(--gris)}
+.partido.mio{border-color:var(--oliva);box-shadow:0 0 0 2px var(--salvia)}
+@media(max-width:480px){.partido{grid-template-columns:44px 1fr auto 1fr;padding:8px}.partido .res{min-width:52px}}
+.vacio{text-align:center;padding:34px 16px;color:var(--gris)}
+.vacio .disp{font-size:26px;color:var(--oliva);display:block;margin-bottom:4px}
+
+/* equipos */
+.eqlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.eqcard{background:#fff;border:1px solid var(--linea);border-radius:12px;padding:12px}
+.eqcard .nom{font-weight:700;font-size:17px}
+.estado{font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.04em}
+.estado.confirmado{background:#dcefd9;color:var(--verde)}
+.estado.pendiente{background:#fbecd0;color:#8a5d06}
+.estado.espera{background:#e4e8ef;color:var(--gris)}
+.estado.baja{background:#f6dfd9;color:var(--rojo)}
+
+/* admin */
+.adm-eq{border:1px solid var(--linea);border-radius:12px;padding:12px;margin-bottom:8px;background:#fff}
+.adm-eq summary{cursor:pointer;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-weight:700;list-style:none}
+.adm-eq summary::-webkit-details-marker{display:none}
+.adm-res{display:grid;grid-template-columns:1fr 54px 54px 1fr;gap:6px;align-items:center}
+.adm-res input{text-align:center;padding:8px 4px}
+.adm-pen{display:grid;grid-template-columns:1fr 54px 54px 1fr;gap:6px;margin-top:4px}
+.adm-pen input{text-align:center;padding:4px;font-size:13px}
+.calc td,.calc th{text-align:center}
+.sub-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.sub-tabs button{border:1.5px solid var(--linea);background:#fff;border-radius:999px;padding:6px 12px;font-weight:700;color:var(--gris);cursor:pointer}
+.sub-tabs button.on{border-color:var(--azul);color:var(--azul)}
+.loader{text-align:center;padding:50px;color:var(--gris)}
+.jug2{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px;border:1px solid var(--linea);border-radius:12px;margin-bottom:6px;background:#fff}
+.jug2 .n{width:20px;color:var(--gris);font-weight:700;text-align:right}
+.jug2 input.nm{flex:1 1 130px;width:auto}
+.jug2 input.dn{flex:1 1 110px;width:auto}
+.jug2 .sexo{width:84px}
+.fiesta-chk{display:flex;align-items:center;gap:4px;margin:0;font-size:18px;cursor:pointer;padding:4px 6px;border:1.5px solid var(--linea);border-radius:10px}
+.fiesta-chk input{width:18px;height:18px}
+.tandas{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.tanda{border:1.5px solid var(--linea);border-radius:12px;padding:10px 12px;background:#fff;color:var(--tinta)}
+.tanda .tn{font-weight:700;font-size:14px;color:var(--gris)}
+.tanda .tp{font-family:'Bangers';font-size:26px;color:var(--azul);letter-spacing:.04em}
+.tanda .tl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--gris)}
+.tanda.activa{border-color:var(--verde);box-shadow:0 0 0 2px #dcefd9}
+.tanda.activa .tl{color:var(--verde)}
+.tanda.agotada{opacity:.55}
+.tanda.agotada .tp{text-decoration:line-through}
+.fiesta{background:linear-gradient(135deg,#173c6f,#2a1f5c);color:#fff;border:0}
+.fiesta h2{color:#fff}
+.tedit{display:grid;grid-template-columns:1fr 110px 80px 32px;gap:6px;align-items:center;margin-bottom:6px}
+.tedit input{padding:8px}
+.puerta .pt{font-family:'Bangers';font-size:28px;letter-spacing:.04em}
+.prow{padding:6px 0;border-bottom:1px solid var(--linea)}
+.prow.in{opacity:.55}
+.comp{font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;background:#e4eefb;color:var(--azul);text-decoration:none}
+.comp.no{background:#f6dfd9;color:var(--rojo)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--tinta);color:#fff;padding:10px 16px;border-radius:10px;font-weight:600;z-index:20;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap hero">
+    <img alt="Logo Naecitu" src="data:image/webp;base64,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">
+    <div>
+      <h1>Naecitu</h1>
+      <div class="sub">Seven Mixto · <span id="h-sede">Club San Fernando</span></div>
+      <div class="meta" id="h-meta"></div>
+    </div>
+  </div>
+</header>
+
+<nav><div class="wrap tabs" role="tablist" id="tabs">
+  <button class="tab" data-t="inicio" aria-selected="true">Inicio</button>
+  <button class="tab cta" data-t="inscripcion" aria-selected="false">Inscribirse</button>
+  <button class="tab" data-t="fiesta" aria-selected="false">Fiesta 🎉</button>
+  <button class="tab" data-t="fixture" aria-selected="false">Fixture</button>
+  <button class="tab" data-t="posiciones" aria-selected="false">Posiciones</button>
+  <button class="tab" data-t="carga" aria-selected="false">Carga de resultados</button>
+  <button class="tab" data-t="admin" aria-selected="false">Admin</button>
+</div></nav>
+
+<main class="wrap">
+  <div class="loader" id="loader">Cargando torneo…</div>
+
+  <section id="s-inicio" hidden></section>
+  <section id="s-inscripcion" hidden></section>
+  <section id="s-fiesta" hidden></section>
+  <section id="s-equipos" hidden></section>
+  <section id="s-fixture" hidden></section>
+  <section id="s-posiciones" hidden></section>
+  <section id="s-carga" hidden></section>
+  <section id="s-admin" hidden></section>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ Estado ============ */
+var D = null;            // datos públicos
+var A = null;            // datos admin
+var PIN = null;
+var PINR = null;          // contraseña de Carga de resultados
+var TAB = 'inicio';
+var miEquipo = '';
+var adminSub = 'equipos';
+var jugadores = [];
+var comprobante = null;
+
+var $ = function(s, el){ return (el||document).querySelector(s); };
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function toast(t){ var el=$('#toast'); el.textContent=t; el.classList.add('on'); clearTimeout(el._t); el._t=setTimeout(function(){el.classList.remove('on');},Math.max(2200, t.length*70)); }
+var API_URL = 'https://script.google.com/macros/s/AKfycbxhh6g4qY6SVkfg4-lOBSAYbQgvY8mUP0KpwPd5Eptkh2lD_yqJS7GT5kToO_oBzREMhQ/exec';
+function api(fn){
+  var args = Array.prototype.slice.call(arguments,1);
+  if(!(window.google && google.script && google.script.run)){
+    // Página fuera de Google (GitHub Pages): llama a la API por fetch
+    return fetch(API_URL, { method:'POST', redirect:'follow', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({fn:fn, args:args}) })
+      .then(function(r){ if(!r.ok) throw new Error('No se pudo conectar ('+r.status+'). Probá de nuevo.'); return r.json(); })
+      .then(function(j){ if(!j.ok) throw new Error(j.error || 'Error'); return j.data; });
+  }
+  return new Promise(function(ok, ko){
+    var r = google.script.run.withSuccessHandler(ok).withFailureHandler(function(e){ ko(e && e.message ? e : new Error(String(e))); });
+    r[fn].apply(r, args);
+  });
+}
+function cfg(k){ return (D && D.config && D.config[k]) || ''; }
+function nombreEq(id){ var e = (A&&A.equiposFull||D.equipos).filter(function(x){return x.id===id;})[0]; return e ? e.nombre : ''; }
+function fmtMonto(m){ var n = Number(String(m).replace(/[^\d.]/g,'')); return n ? '$ ' + n.toLocaleString('es-AR') : esc(m); }
+function fmtFecha(f){ if(!f) return ''; var d = new Date(f + 'T12:00:00'); if(isNaN(d)) return esc(f); return d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'}); }
+try { miEquipo = localStorage.getItem('naecitu-mi-equipo') || ''; } catch(e){}
+
+/* ============ Tabs ============ */
+$('#tabs').addEventListener('click', function(e){
+  var b = e.target.closest('.tab'); if(!b) return;
+  irA(b.dataset.t);
+});
+function irA(t){
+  TAB = t;
+  document.querySelectorAll('.tab').forEach(function(b){ b.setAttribute('aria-selected', b.dataset.t===t); });
+  document.querySelectorAll('main section').forEach(function(s){ s.hidden = s.id !== 's-'+t; });
+  render();
+  window.scrollTo({top:0});
+}
+
+/* ============ Carga ============ */
+function cargar(){
+  return api('getPublicData').then(function(d){ D = d; $('#loader').remove(); pintarHeader(); irA(TAB); })
+    .catch(function(e){ $('#loader').textContent = 'No se pudo cargar: ' + e.message; });
+}
+function aplicarAdmin(d){ A = d; D = d; pintarHeader(); render(); }
+function pintarHeader(){
+  $('#h-sede').textContent = cfg('sede');
+  var m = [];
+  if(cfg('fecha')) m.push('📅 ' + fmtFecha(cfg('fecha')));
+  m.push('⏰ ' + esc(cfg('horaInicio')) + ' h');
+  m.push('🏑 ' + ((D.conteo&&D.conteo.inscriptos)||0) + ' / ' + esc(cfg('cupo')) + ' equipos');
+  $('#h-meta').innerHTML = m.map(function(x){ return '<span class="chip">'+x+'</span>'; }).join('');
+}
+function render(){
+  if(!D) return;
+  ({inicio:rInicio, inscripcion:rInscripcion, fiesta:rFiesta, equipos:rEquipos, fixture:rFixture, posiciones:rPosiciones, carga:rCarga, admin:rAdmin})[TAB]();
+}
+
+/* ============ Inicio ============ */
+function mdLite(t){
+  var out = [], lista = false;
+  String(t||'').split('\n').forEach(function(l){
+    var s = l.trim(), li = /^[-•]\s+/.test(s);
+    if(lista && !li){ out.push('</ul>'); lista = false; }
+    if(!s) return;
+    var h = esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+    if(/^#{1,3}\s/.test(s)) out.push('<h3 style="margin:16px 0 4px">'+h.replace(/^#{1,3}\s/,'')+'</h3>');
+    else if(li){ if(!lista){ out.push('<ul style="margin:4px 0 8px;padding-left:20px">'); lista = true; } out.push('<li style="margin:3px 0">'+h.replace(/^[-•]\s+/,'')+'</li>'); }
+    else out.push('<p style="margin:6px 0">'+h+'</p>');
+  });
+  if(lista) out.push('</ul>');
+  return out.join('');
+}
+function infoTorneo(){ return cfg('reglamento') ? '<div class="card"><h2>El torneo</h2>'+mdLite(cfg('reglamento'))+'</div>' : ''; }
+function bloquePago(){
+  if(!cfg('alias') && !cfg('monto')) return '';
+  return '<div class="card pago"><h2>Inscripción</h2>'
+    + (cfg('monto') ? '<div class="monto">'+fmtMonto(cfg('monto'))+' por equipo</div>' : '')
+    + (cfg('alias') ? '<div class="small" style="margin-top:8px;opacity:.85">Alias</div><div class="row"><div class="alias grow">'+esc(cfg('alias'))+'</div><button class="btn sm" onclick="copiarAlias()">Copiar alias</button></div>' : '')
+    + (cfg('cvu') ? '<div class="small" style="margin-top:8px;opacity:.85">CVU</div><div class="row"><div class="cvu grow">'+esc(cfg('cvu'))+'</div><button type="button" class="btn sm" onclick="copiarTexto(cfg(\'cvu\'),\'CVU copiado\')">Copiar CVU</button></div>' : '')
+    + (cfg('titular') ? '<div class="small">Titular: '+esc(cfg('titular'))+'</div>' : '')
+    + (cfg('infoPago') ? '<p class="small" style="margin:10px 0 0">'+esc(cfg('infoPago'))+'</p>' : '')
+    + '</div>';
+}
+function copiarTexto(t, ok){ (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function(){ toast(ok); }).catch(function(){ prompt('Copiá:', t); }); }
+function copiarAlias(){
+  var a = cfg('alias');
+  (navigator.clipboard ? navigator.clipboard.writeText(a) : Promise.reject()).then(function(){ toast('Alias copiado'); })
+    .catch(function(){ prompt('Copiá el alias:', a); });
+}
+function rInicio(){
+  var avisos = D.avisos.length ? D.avisos.map(function(a){
+    return '<div class="card aviso'+(a.fijado===true||a.fijado==='TRUE'?' fijo':'')+'"><h3>'+(a.fijado===true||a.fijado==='TRUE'?'📌 ':'')+esc(a.titulo)+'</h3><div class="fecha">'+esc(a.fecha)+'</div><p>'+esc(a.texto)+'</p></div>';
+  }).join('') : '<div class="card vacio"><span class="disp">Sin novedades</span>Acá vamos a publicar horarios, cambios y resultados.</div>';
+  var abierta = cfg('inscripcionAbierta') === 'si';
+  $('#s-inicio').innerHTML =
+    (abierta ? '<div class="card row" style="justify-content:space-between"><div><h2 style="margin:0">Inscripción abierta</h2><div class="muted small">Equipos mixtos · desde '+esc(cfg('minJugadores'))+' jugadores, sin límite</div></div><button class="btn verde" onclick="irA(\'inscripcion\')">Anotar equipo</button></div>'
+             : '<div class="card"><h2 style="margin:0">Inscripción cerrada</h2></div>')
+    + infoTorneo()
+    + '<h2 style="margin:18px 0 10px">Avisos</h2>' + avisos
+    + (cfg('contacto') ? '<div class="card"><h3>Contacto</h3><p style="margin:0;white-space:pre-wrap">'+esc(cfg('contacto'))+'</p></div>' : '')
+    + bloquePago();
+}
+
+/* ============ Inscripción ============ */
+function rInscripcion(){
+  var s = $('#s-inscripcion');
+  if(cfg('inscripcionAbierta') !== 'si'){ s.innerHTML = '<div class="card vacio"><span class="disp">Inscripción cerrada</span>Consultá con la organización.</div>'; return; }
+  if(s.dataset.ok) return;
+  var min = +cfg('minJugadores') || 7;
+  if(!jugadores.length) for(var i=0;i<min;i++) jugadores.push({nombre:'',apellido:'',dni:'',sexo:'',fiesta:i<(+cfg('entradasEquipo')||7)});
+  var ocupados = (D.conteo&&D.conteo.inscriptos)||0;
+  var lleno = ocupados >= +cfg('cupo');
+  s.innerHTML =
+    infoTorneo()
+    + (lleno ? '<div class="msg err">El cupo está completo. Si te anotás quedás en lista de espera.</div>' : '')
+    + '<form class="card" id="f-ins" novalidate>'
+    + '<h2>Datos del equipo</h2>'
+    + '<div class="grid2"><div><label for="i-nombre">Nombre del equipo *</label><input type="text" id="i-nombre" maxlength="40" required></div>'
+    + '<div><label for="i-club">Club / grupo</label><input type="text" id="i-club" maxlength="60"></div></div>'
+    + '<div class="grid2"><div><label for="i-cap">Capitán/a *</label><input type="text" id="i-cap" maxlength="60" required></div>'
+    + '<div><label for="i-tel">WhatsApp *</label><input type="tel" id="i-tel" maxlength="30" placeholder="11 1234-5678" required></div></div>'
+    + '<label for="i-mail">Email * <span class="muted" style="font-weight:400">(ahí llega la confirmación)</span></label><input type="email" id="i-mail" maxlength="80" required>'
+    + '<h2 style="margin-top:18px">Plantel</h2><div class="muted small">Mínimo '+esc(cfg('minMujeres'))+' mujeres y '+esc(cfg('minVarones'))+' varones · desde '+min+' jugadores, sin límite</div>'
+    + '<div class="muted small" style="margin-top:4px">Marcá con 🎉 a quienes usan las '+esc(cfg('entradasEquipo')||7)+' entradas a la fiesta incluidas. <b>Para entrar a la fiesta se escanea el DNI</b>, así que cargalo bien.</div>'
+    + '<div class="contador" id="i-cont"></div><div id="i-jug"></div>'
+    + '<button type="button" class="btn ghost sm" id="i-add">+ Agregar jugador/a</button>'
+    + '<div style="margin-top:18px">' + bloquePago() + '</div>'
+    + '<h2 style="margin-top:18px">Comprobante de pago</h2>'
+    + '<div class="muted small">Imagen o PDF, hasta 5 MB. Si todavía no pagaste, podés mandarlo después por WhatsApp.</div>'
+    + '<input type="file" id="i-comp" accept="image/*,application/pdf" style="margin-top:8px">'
+    + '<label class="check"><input type="checkbox" id="i-ok"> <span>Entiendo que la inscripción es un monto fijo por equipo que incluye 7 entradas a la fiesta (las entradas adicionales se pagan aparte) y que el equipo queda inscripto recién cuando la organización valida el pago.</span></label>'
+    + '<button class="btn verde" style="width:100%;margin-top:16px;padding:14px" id="i-send">Enviar inscripción</button>'
+    + '<div id="i-msg"></div></form>';
+  pintarJugadores();
+  $('#i-add').onclick = function(){ if(jugadores.length < +cfg('maxJugadores')){ jugadores.push({nombre:'',apellido:'',dni:'',sexo:'',fiesta:false}); pintarJugadores(); } };
+  $('#i-comp').onchange = leerComprobante;
+  $('#f-ins').onsubmit = enviarInscripcion;
+}
+function pintarJugadores(){
+  var maxF = +cfg('entradasEquipo') || 7;
+  $('#i-jug').innerHTML = jugadores.map(function(j,i){
+    return '<div class="jug2"><span class="n">'+(i+1)+'</span>'
+      + '<input type="text" class="nm" placeholder="Nombre" value="'+esc(j.nombre)+'" data-i="'+i+'" data-k="nombre" maxlength="40" aria-label="Nombre jugador '+(i+1)+'">'
+      + '<input type="text" class="nm" placeholder="Apellido" value="'+esc(j.apellido)+'" data-i="'+i+'" data-k="apellido" maxlength="40" aria-label="Apellido jugador '+(i+1)+'">'
+      + '<input type="text" class="dn" inputmode="numeric" placeholder="DNI" value="'+esc(j.dni)+'" data-i="'+i+'" data-k="dni" maxlength="12" aria-label="DNI jugador '+(i+1)+'">'
+      + '<div class="sexo"><button type="button" class="F'+(j.sexo==='F'?' on':'')+'" data-i="'+i+'" data-s="F" aria-label="Mujer">M</button><button type="button" class="M'+(j.sexo==='M'?' on':'')+'" data-i="'+i+'" data-s="M" aria-label="Varón">V</button></div>'
+      + '<label class="fiesta-chk" title="Usa una de las entradas a la fiesta"><input type="checkbox" data-f="'+i+'"'+(j.fiesta?' checked':'')+' aria-label="Entrada a la fiesta jugador '+(i+1)+'">🎉</label>'
+      + '<button type="button" class="x" data-del="'+i+'" aria-label="Quitar">×</button></div>';
+  }).join('');
+  $('#i-jug').querySelectorAll('input[data-k]').forEach(function(el){ el.oninput = function(){ jugadores[+el.dataset.i][el.dataset.k] = el.value; contar(); }; });
+  $('#i-jug').querySelectorAll('input[data-f]').forEach(function(el){ el.onchange = function(){
+    var usadas = jugadores.filter(function(j){return j.fiesta;}).length;
+    if(el.checked && usadas >= maxF){ el.checked = false; toast('La inscripción incluye '+maxF+' entradas. Las demás se compran en la pestaña Fiesta.'); return; }
+    jugadores[+el.dataset.f].fiesta = el.checked; contar();
+  }; });
+  $('#i-jug').querySelectorAll('.sexo button').forEach(function(b){ b.onclick = function(){ jugadores[+b.dataset.i].sexo = b.dataset.s; pintarJugadores(); }; });
+  $('#i-jug').querySelectorAll('[data-del]').forEach(function(b){ b.onclick = function(){ jugadores.splice(+b.dataset.del,1); pintarJugadores(); }; });
+  $('#i-add').disabled = jugadores.length >= +cfg('maxJugadores');
+  contar();
+}
+function contar(){
+  var v = jugadores.filter(function(j){return (j.nombre+j.apellido+j.dni).trim();});
+  var f = v.filter(function(j){return j.sexo==='F';}).length, m = v.filter(function(j){return j.sexo==='M';}).length;
+  var cl = function(ok){ return ok ? 'ok' : 'mal'; };
+  $('#i-cont').innerHTML = '<span class="'+cl(v.length>=+cfg('minJugadores'))+'">'+v.length+' jugadores</span>'
+    + '<span class="'+cl(f>=+cfg('minMujeres'))+'">'+f+' mujeres</span><span class="'+cl(m>=+cfg('minVarones'))+'">'+m+' varones</span>'
+    + '<span class="ok">🎉 '+jugadores.filter(function(j){return j.fiesta;}).length+' / '+(+cfg('entradasEquipo')||7)+' entradas a la fiesta</span>';
+}
+function leerComprobante(e){
+  var file = e.target.files[0]; comprobante = null;
+  if(!file) return;
+  if(file.size > 5*1024*1024){ toast('El archivo supera 5 MB'); e.target.value=''; return; }
+  var r = new FileReader();
+  r.onload = function(){ comprobante = { nombre:file.name, tipo:file.type || 'application/octet-stream', data:String(r.result).split(',')[1] }; };
+  r.readAsDataURL(file);
+}
+function enviarInscripcion(ev){
+  ev.preventDefault();
+  var msg = $('#i-msg'); msg.innerHTML = '';
+  var err = function(t){ msg.innerHTML = '<div class="msg err">'+esc(t)+'</div>'; };
+  var lleno = jugadores.filter(function(j){return (j.nombre+j.apellido+j.dni).trim();});
+  if(!$('#i-nombre').value.trim()) return err('Falta el nombre del equipo.');
+  if(!$('#i-cap').value.trim() || !$('#i-tel').value.trim()) return err('Faltan nombre y WhatsApp del capitán/a.');
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test($('#i-mail').value.trim())) return err('Ingresá un email válido: ahí te llega la confirmación.');
+  if(lleno.some(function(j){return !j.nombre.trim() || !j.apellido.trim();})) return err('Completá nombre y apellido de cada jugador/a.');
+  if(lleno.some(function(j){return !dniOk(j.dni);})) return err('Revisá los DNI: solo números, 7 u 8 dígitos.');
+  if(lleno.some(function(j){return !j.sexo;})) return err('Marcá M (mujer) o V (varón) para cada jugador/a.');
+  if(!$('#i-ok').checked) return err('Tenés que aceptar la confirmación.');
+  var b = $('#i-send'); b.disabled = true; b.textContent = 'Enviando…';
+  api('inscribir', {
+    nombre: $('#i-nombre').value, club: $('#i-club').value, capitan: $('#i-cap').value,
+    telefono: $('#i-tel').value, email: $('#i-mail').value, jugadores: lleno, comprobante: comprobante
+  }).then(function(r){
+    var s = $('#s-inscripcion'); s.dataset.ok = '1';
+    jugadores = []; comprobante = null;
+    s.innerHTML = '<div class="card"><h2>¡Listo, '+esc($('#i-nombre').value)+'!</h2>'
+      + (r.espera ? '<p>El cupo estaba completo: quedaron <b>en lista de espera</b>. Te avisamos si se libera un lugar.</p>'
+                  : '<p>La inscripción quedó <b>pendiente</b> hasta que validemos el pago. Cuando la confirmemos te llega un mail.</p>')
+      + (r.comprobante ? '<p class="muted">Recibimos el comprobante.</p>' : '<p>Acordate de transferir y mandar el comprobante.</p>')
+      + '</div>' + bloquePago()
+      + '<button class="btn ghost" onclick="var s=document.getElementById(\'s-inscripcion\');delete s.dataset.ok;rInscripcion()">Inscribir otro equipo</button>';
+    return api('getPublicData').then(function(d){ D = d; pintarHeader(); });
+  }).catch(function(e){ err(e.message.replace(/^Error:\s*/,'')); b.disabled = false; b.textContent = 'Enviar inscripción'; });
+}
+
+/* ============ Fiesta ============ */
+var compraEnt = null, asistentes = [{nombre:'',apellido:'',dni:''}], cantEnt = 1;
+function fmtPesos(n){ return '$ ' + Number(n||0).toLocaleString('es-AR'); }
+function nombreC(j){ return ((j.nombre||'')+' '+(j.apellido||'')).trim(); }
+function dniOk(d){ d = String(d||'').replace(/\D/g,''); return d.length>=6 && d.length<=9; }
+function aliasHtml(){
+  return (cfg('alias') ? '<div class="small" style="margin-top:8px;opacity:.85">Alias</div><div class="row"><div class="alias grow">'+esc(cfg('alias'))+'</div><button type="button" class="btn sm" onclick="copiarAlias()">Copiar alias</button></div>' : '<p class="small">El alias se publica en breve.</p>')
+    + (cfg('cvu') ? '<div class="small" style="margin-top:8px;opacity:.85">CVU</div><div class="row"><div class="cvu grow">'+esc(cfg('cvu'))+'</div><button type="button" class="btn sm" onclick="copiarTexto(cfg(\'cvu\'),\'CVU copiado\')">Copiar CVU</button></div>' : '')
+    + (cfg('titular') ? '<div class="small">Titular: '+esc(cfg('titular'))+'</div>' : '');
+}
+function tandasHtml(F){
+  return '<div class="tandas">' + (F.tandas||[]).map(function(t,i){
+    var st = i===F.activa ? 'activa' : (t.quedan<=0 ? 'agotada' : 'proxima');
+    var lab = st==='activa' ? 'A la venta · quedan '+t.quedan : st==='agotada' ? 'Agotada' : 'Próximamente';
+    return '<div class="tanda '+st+'"><div class="tn">'+esc(t.nombre)+'</div><div class="tp">'+(t.precio==null?'$ xx.xxx':fmtPesos(t.precio))+'</div><div class="tl">'+lab+'</div></div>';
+  }).join('') + '</div>';
+}
+function rFiesta(){
+  var s = $('#s-fiesta');
+  if(s.dataset.ok) return;
+  var F = D.fiesta || {tandas:[], activa:-1, abierta:false, maxPorCompra:10};
+  var head = '<div class="card fiesta"><h2>Fiesta · Barra libre</h2>'
+    + '<p style="margin:4px 0 12px">El after del Naecitu con <b>barra libre</b>'+(cfg('fecha')?' · '+fmtFecha(cfg('fecha')):'')+'. Las entradas se venden en preventas: cuando se agota una, empieza la siguiente.</p>'
+    + tandasHtml(F)
+    + '<p class="small" style="margin:12px 0 0">🪪 <b>Para entrar se escanea el DNI.</b> Tiene que coincidir con el que se cargó al comprar la entrada o en la inscripción del equipo. Traé el DNI físico. Solo mayores de 18.</p></div>';
+  if(!F.abierta){ s.innerHTML = head + '<div class="card vacio"><span class="disp">Venta cerrada</span>Seguí los avisos para saber cuándo abre.</div>'; return; }
+  if(F.activa < 0){ s.innerHTML = head + '<div class="card vacio"><span class="disp">Agotadas</span>No quedan entradas.</div>'; return; }
+  var t = F.tandas[F.activa], max = Math.min(F.maxPorCompra, t.quedan);
+  if(cantEnt > max) cantEnt = max;
+  var opts = ''; for(var i=1;i<=max;i++) opts += '<option'+(i===cantEnt?' selected':'')+'>'+i+'</option>';
+  s.innerHTML = head
+    + '<form class="card" id="f-ent" novalidate><h2>Comprar entradas</h2>'
+    + '<div class="muted small">'+esc(t.nombre)+' · '+fmtPesos(t.precio)+' cada una</div>'
+    + '<div class="grid2"><div><label for="e-nom">Tu nombre y apellido *</label><input type="text" id="e-nom" maxlength="60"></div>'
+    + '<div><label for="e-tel">WhatsApp *</label><input type="tel" id="e-tel" maxlength="30" placeholder="11 1234-5678"></div></div>'
+    + '<div class="grid2"><div><label for="e-mail">Email * <span class="muted" style="font-weight:400">(ahí llegan las entradas)</span></label><input type="email" id="e-mail" maxlength="80"></div>'
+    + '<div><label for="e-cant">Cantidad de entradas</label><select id="e-cant">'+opts+'</select></div></div>'
+    + '<label>Datos de cada asistente *</label><div class="muted small" style="margin-bottom:6px">El DNI se escanea en la puerta: tiene que ser el de la persona que va a entrar.</div><div id="e-asis"></div>'
+    + '<div class="card pago" style="margin-top:14px"><h2>Pago</h2><div class="monto" id="e-total"></div>'+aliasHtml()
+    + '<p class="small" style="margin:10px 0 0">Transferí el total y subí el comprobante. Las entradas te llegan por mail cuando confirmemos el pago.</p></div>'
+    + '<label for="e-comp">Comprobante de pago</label><input type="file" id="e-comp" accept="image/*,application/pdf">'
+    + '<label class="check"><input type="checkbox" id="e-ok"> <span>Todos los asistentes son mayores de 18 años y entiendo que para entrar se escanea el DNI cargado.</span></label>'
+    + '<button class="btn verde" style="width:100%;margin-top:16px;padding:14px" id="e-send">Reservar entradas</button><div id="e-msg"></div></form>';
+  pintarAsistentes(t);
+  $('#e-cant').onchange = function(){ cantEnt = +this.value; pintarAsistentes(t); };
+  $('#e-comp').onchange = function(e){
+    var file = e.target.files[0]; compraEnt = null; if(!file) return;
+    if(file.size > 5*1024*1024){ toast('El archivo supera 5 MB'); e.target.value=''; return; }
+    var r = new FileReader(); r.onload = function(){ compraEnt = {nombre:file.name, tipo:file.type||'application/octet-stream', data:String(r.result).split(',')[1]}; }; r.readAsDataURL(file);
+  };
+  $('#f-ent').onsubmit = function(ev){ enviarEntradas(ev, t); };
+}
+function pintarAsistentes(t){
+  while(asistentes.length < cantEnt) asistentes.push({nombre:'',apellido:'',dni:''});
+  asistentes.length = cantEnt;
+  $('#e-asis').innerHTML = asistentes.map(function(a,i){
+    return '<div class="jug2"><span class="n">'+(i+1)+'</span>'
+      + '<input type="text" class="nm" maxlength="40" placeholder="Nombre" value="'+esc(a.nombre)+'" data-i="'+i+'" data-k="nombre" aria-label="Nombre asistente '+(i+1)+'">'
+      + '<input type="text" class="nm" maxlength="40" placeholder="Apellido" value="'+esc(a.apellido)+'" data-i="'+i+'" data-k="apellido" aria-label="Apellido asistente '+(i+1)+'">'
+      + '<input type="text" class="dn" inputmode="numeric" maxlength="12" placeholder="DNI" value="'+esc(a.dni)+'" data-i="'+i+'" data-k="dni" aria-label="DNI asistente '+(i+1)+'"></div>';
+  }).join('');
+  $('#e-asis').querySelectorAll('input').forEach(function(el){ el.oninput = function(){ asistentes[+el.dataset.i][el.dataset.k] = el.value; }; });
+  $('#e-total').textContent = 'Total: ' + fmtPesos(t.precio * cantEnt);
+}
+function enviarEntradas(ev, t){
+  ev.preventDefault();
+  var msg = $('#e-msg'); msg.innerHTML = '';
+  var err = function(x){ msg.innerHTML = '<div class="msg err">'+esc(x)+'</div>'; };
+  if(!$('#e-nom').value.trim() || !$('#e-tel').value.trim()) return err('Faltan tu nombre y WhatsApp.');
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test($('#e-mail').value.trim())) return err('Ingresá un email válido: ahí te llegan las entradas.');
+  if(asistentes.some(function(a){ return !a.nombre.trim() || !a.apellido.trim(); })) return err('Completá nombre y apellido de cada asistente.');
+  if(asistentes.some(function(a){ return !dniOk(a.dni); })) return err('Revisá los DNI: solo números, 7 u 8 dígitos.');
+  if(!$('#e-ok').checked) return err('Tenés que confirmar que son mayores de 18 y que se escanea el DNI.');
+  var b = $('#e-send'); b.disabled = true; b.textContent = 'Enviando…';
+  api('comprarEntradas', { nombre:$('#e-nom').value, telefono:$('#e-tel').value, email:$('#e-mail').value, cantidad:cantEnt, asistentes:asistentes, comprobante:compraEnt })
+  .then(function(r){
+    var s = $('#s-fiesta'); s.dataset.ok = '1';
+    s.innerHTML = '<div class="card"><h2>¡Reservado!</h2><p>Reservaste <b>'+cantEnt+' entrada'+(cantEnt>1?'s':'')+'</b> de '+esc(r.tanda)+'. Total: <b>'+fmtPesos(r.total)+'</b>.</p>'
+      + (r.comprobante ? '<p class="muted">Recibimos el comprobante. Cuando confirmemos el pago te llegan las entradas por mail.</p>' : '<p>Transferí el total y mandanos el comprobante. Cuando confirmemos el pago te llegan las entradas por mail.</p>')
+      + '<p class="small">🪪 En la puerta se escanea el DNI de cada asistente.</p>'
+      + '</div><div class="card pago"><h2>Pago</h2><div class="monto">'+fmtPesos(r.total)+'</div>'+aliasHtml()+'</div>'
+      + '<button class="btn ghost" onclick="var s=document.getElementById(\'s-fiesta\');delete s.dataset.ok;rFiesta()">Comprar más entradas</button>';
+    asistentes = [{nombre:'',apellido:'',dni:''}]; cantEnt = 1; compraEnt = null;
+    return api('getPublicData').then(function(d){ D = d; });
+  }).catch(function(e){ err(e.message.replace(/^Error:\s*/,'')); b.disabled = false; b.textContent = 'Reservar entradas'; });
+}
+
+/* ============ Admin: entradas y puerta ============ */
+function aEntradas(){
+  var E = A.entradasFull || [], F = A.fiestaAdmin || D.fiesta || {tandas:[]};
+  var suma = function(arr, k){ return arr.reduce(function(s,e){ return s + (+e[k]||0); }, 0); };
+  var vivas = E.filter(function(e){ return e.estado!=='baja'; }), conf = E.filter(function(e){ return e.estado==='confirmado'; });
+  var resumen = '<div class="card"><h2>Entradas fiesta</h2><div class="row small" style="margin-bottom:10px"><span><b>'+suma(vivas,'cantidad')+'</b> reservadas</span><span>· <b>'+suma(conf,'cantidad')+'</b> confirmadas</span><span>· <b>'+fmtPesos(suma(conf,'total'))+'</b> cobrado</span></div>' + tandasHtml(F) + '</div>';
+  var lista = E.length ? E.map(function(e){
+    var wa = String(e.telefono).replace(/\D/g,''); if(wa && wa.indexOf('54')!==0) wa = '549' + wa.replace(/^0/,'').replace(/^15/,'');
+    return '<details class="adm-eq"><summary><span class="estado '+esc(e.estado)+'">'+esc(e.estado)+'</span> '+esc(e.nombre)+' · '+esc(e.cantidad)+' × '+esc(e.tanda)+' <span class="muted small">· '+fmtPesos(e.total)+' · pago: '+esc(e.pago)+'</span>'+(e.comprobante ? ' <a class="comp" href="'+esc(e.comprobante)+'" target="_blank" rel="noopener">📎 comprobante</a>' : ' <span class="comp no">sin comprobante</span>')+'</summary>'
+      + '<div class="small" style="margin-top:8px">'+esc(e.telefono)+' '+(wa?'<a href="https://wa.me/'+wa+'" target="_blank" rel="noopener">WhatsApp</a>':'')+' · '+esc(e.email)+' · Código <b>'+esc(e.codigo)+'</b></div>'
+      + '<div class="small muted">Reservado: '+esc(e.fecha)+'</div>'
+      + (e.comprobante ? '<div class="small"><a href="'+esc(e.comprobante)+'" target="_blank" rel="noopener">Ver comprobante</a></div>' : '')
+      + '<ol class="small" style="margin:8px 0">' + e.asistentes.map(function(a){ return '<li>'+esc(nombreC(a))+' <span class="muted">· DNI '+esc(a.dni)+'</span></li>'; }).join('') + '</ol>'
+      + '<div class="row">' + (e.estado==='confirmado' ? '<button class="btn ghost sm" data-emai="'+esc(e.id)+'">Reenviar entradas</button>' : '<button class="btn verde sm" data-econf="'+esc(e.id)+'">Pago OK → confirmar y mandar entradas</button>')
+      + '<button class="btn rojo sm" data-eelim="'+esc(e.id)+'">Eliminar</button></div>'
+      + '<div class="small muted" style="margin-top:6px">Mail: '+esc(e.mail||'no enviado')+'</div></details>';
+  }).join('') : '<div class="card vacio">Todavía no hay reservas.</div>';
+  var editor = '<div class="card"><h3>Preventas</h3><div class="muted small">Se venden en orden: cuando se agota el cupo de una, arranca la siguiente.</div><div id="t-rows" style="margin-top:8px"></div><div class="row" style="margin-top:8px"><button class="btn ghost sm" id="t-add">+ Preventa</button><button class="btn sm" id="t-save">Guardar preventas</button></div></div>';
+  $('#adm').innerHTML = resumen + lista + editor;
+  var tr = (F.tandas||[]).map(function(t){ return {nombre:t.nombre, precio:t.precio, cupo:t.cupo}; });
+  var pintarT = function(){
+    $('#t-rows').innerHTML = '<div class="tedit muted small"><span>Nombre</span><span>Precio</span><span>Cupo</span><span></span></div>' + tr.map(function(t,i){ return '<div class="tedit"><input type="text" value="'+esc(t.nombre)+'" data-i="'+i+'" data-k="nombre" aria-label="Nombre"><input type="number" value="'+esc(t.precio)+'" data-i="'+i+'" data-k="precio" aria-label="Precio"><input type="number" value="'+esc(t.cupo)+'" data-i="'+i+'" data-k="cupo" aria-label="Cupo"><button class="x" data-tdel="'+i+'" aria-label="Quitar">×</button></div>'; }).join('');
+    $('#t-rows').querySelectorAll('input').forEach(function(el){ el.oninput = function(){ tr[+el.dataset.i][el.dataset.k] = el.value; }; });
+    $('#t-rows').querySelectorAll('[data-tdel]').forEach(function(b){ b.onclick = function(){ tr.splice(+b.dataset.tdel,1); pintarT(); }; });
+  };
+  pintarT();
+  $('#t-add').onclick = function(){ tr.push({nombre:'Preventa '+(tr.length+1), precio:'', cupo:100}); pintarT(); };
+  $('#t-save').onclick = function(){ guardar(api('adminTandas', PIN, tr), 'Preventas guardadas'); };
+  $('#adm').querySelectorAll('[data-econf]').forEach(function(b){ b.onclick = function(){ b.disabled = true; guardar(api('adminEntrada', PIN, b.dataset.econf, {estado:'confirmado', pago:'pagado'}), 'Confirmado'); }; });
+  $('#adm').querySelectorAll('[data-emai]').forEach(function(b){ b.onclick = function(){ b.disabled = true; guardar(api('adminReenviarEntradas', PIN, b.dataset.emai)); }; });
+  $('#adm').querySelectorAll('[data-eelim]').forEach(function(b){ b.onclick = function(){ if(confirm('¿Eliminar esta reserva? Las entradas vuelven a la venta.')) guardar(api('adminEliminarEntrada', PIN, b.dataset.eelim), 'Reserva eliminada'); }; });
+}
+function aPuerta(){
+  $('#adm').innerHTML = '<div class="card"><h2>Control de puerta</h2><div class="muted small">Escaneá el código de barras del DNI con un lector (USB o Bluetooth) o tipeá el número y apretá Enter. Cada DNI entra una sola vez.</div>'
+    + '<form id="p-form" class="row" style="margin-top:10px"><input type="text" id="p-in" class="grow" autocomplete="off" placeholder="Escaneá o tipeá el DNI" style="width:auto"><button class="btn">Buscar</button></form>'
+    + '<div id="p-res"></div></div>'
+    + '<div class="card"><div class="row" style="justify-content:space-between"><h3 style="margin:0">Con entrada confirmada</h3><span class="muted small" id="p-cnt"></span></div><input type="text" id="p-filtro" placeholder="Filtrar por nombre o DNI" style="margin:8px 0"><div id="p-lista" class="small"></div></div>';
+  var lista = [];
+  var pintar = function(){
+    var f = $('#p-filtro').value.toLowerCase();
+    $('#p-lista').innerHTML = lista.filter(function(p){ return !f || (p.nombre+' '+p.dni).toLowerCase().indexOf(f)>=0; }).map(function(p){
+      return '<div class="prow'+(p.ingreso?' in':'')+'"><b>'+esc(p.nombre)+'</b> · DNI '+esc(p.dni)+' <span class="muted">· '+esc(p.origen)+'</span>'+(p.ingreso?' <span class="estado confirmado">ingresó</span>':'')+'</div>';
+    }).join('') || '<div class="muted">Nadie con entrada confirmada todavía.</div>';
+  };
+  var cargarP = function(){ api('adminPuerta', PIN).then(function(r){ lista = r.lista; $('#p-cnt').textContent = r.ingresados+' de '+lista.length+' ingresaron'; pintar(); }).catch(function(e){ toast(e.message); }); };
+  $('#p-filtro').oninput = pintar;
+  $('#p-form').onsubmit = function(ev){
+    ev.preventDefault();
+    var v = $('#p-in').value; if(!v.trim()) return;
+    $('#p-in').value = ''; $('#p-res').innerHTML = '<div class="msg">Buscando…</div>';
+    api('adminIngreso', PIN, v).then(function(r){
+      var tit = r.estado==='ok' ? '✅ Puede pasar' : r.estado==='repetido' ? '⚠️ Ya ingresó' : r.estado==='invalido' ? '❓ No se leyó' : '⛔ Sin entrada';
+      $('#p-res').innerHTML = '<div class="msg '+(r.estado==='ok'?'ok':'err')+' puerta"><div class="pt">'+tit+'</div>'
+        + (r.persona ? '<div>'+esc(r.persona.nombre)+' · DNI '+esc(r.dni)+'</div><div class="small">'+esc(r.persona.origen)+'</div>' : (r.dni ? '<div>DNI '+esc(r.dni)+(r.leido?' · '+esc(r.leido):'')+'</div>' : ''))
+        + (r.texto ? '<div class="small">'+esc(r.texto)+'</div>' : '') + '</div>';
+      if(r.estado==='ok') cargarP();
+      $('#p-in').focus();
+    }).catch(function(e){ $('#p-res').innerHTML = '<div class="msg err">'+esc(e.message)+'</div>'; });
+  };
+  cargarP();
+  $('#p-in').focus();
+}
+
+/* ============ Equipos ============ */
+function rEquipos(){
+  var lista = D.equipos.slice().sort(function(a,b){ return a.nombre.localeCompare(b.nombre); });
+  var orden = {confirmado:0, pendiente:1, espera:2};
+  lista.sort(function(a,b){ return (orden[a.estado]||0) - (orden[b.estado]||0); });
+  $('#s-equipos').innerHTML = '<div class="card row" style="justify-content:space-between"><h2 style="margin:0">Equipos</h2><span class="muted">'
+    + lista.filter(function(e){return e.estado==='confirmado';}).length + ' confirmados · ' + lista.length + ' anotados</span></div>'
+    + (lista.length ? '<div class="eqlist">' + lista.map(function(e){
+      return '<div class="eqcard"><div class="row" style="justify-content:space-between"><span class="nom">'+esc(e.nombre)+'</span><span class="estado '+esc(e.estado)+'">'+esc(e.estado)+'</span></div>'
+        + '<div class="muted small">'+esc(e.club||'')+'</div><div class="small" style="margin-top:4px">'+e.jugadores+' jugadores · '+e.mujeres+' M · '+e.varones+' V</div></div>';
+    }).join('') + '</div>' : '<div class="card vacio"><span class="disp">Todavía nadie</span>Sé el primer equipo en anotarse.</div>');
+}
+
+/* ============ Fixture ============ */
+function etiqueta(p, lado){
+  var id = lado==='L' ? p.local : p.visitante;
+  if(id) return {t:nombreEq(id) || id, lab:false};
+  return {t:(lado==='L'?p.etiquetaL:p.etiquetaV) || 'A definir', lab:true};
+}
+function ganador(p){
+  if(p.gl===''||p.gv===''||p.gl==null) return null;
+  var gl=+p.gl, gv=+p.gv;
+  if(gl!==gv) return gl>gv ? 'L' : 'V';
+  if(p.pl!==''&&p.pv!==''&&p.pl!=null&&+p.pl!==+p.pv) return +p.pl>+p.pv ? 'L' : 'V';
+  return 'E';
+}
+function htmlPartido(p){
+  var L = etiqueta(p,'L'), V = etiqueta(p,'V'), g = ganador(p);
+  var jugado = p.gl!=='' && p.gl!=null;
+  var mio = miEquipo && (p.local===miEquipo || p.visitante===miEquipo);
+  var pen = (jugado && p.pl!=='' && p.pl!=null) ? '<span class="pen">pen. '+p.pl+'-'+p.pv+'</span>' : '';
+  return '<div class="partido'+(mio?' mio':'')+'"><div class="cancha">Cancha '+esc(p.cancha)+'<b>'+esc(p.zona||p.fase)+'</b></div>'
+    + '<div class="eq'+(L.lab?' lab':'')+(g==='L'?' gana':'')+'">'+esc(L.t)+'</div>'
+    + (jugado ? '<div class="res">'+p.gl+' - '+p.gv+pen+'</div>' : '<div class="res vs">vs</div>')
+    + '<div class="eq v'+(V.lab?' lab':'')+(g==='V'?' gana':'')+'">'+esc(V.t)+'</div></div>';
+}
+function agruparTurnos(ps){
+  var t = {};
+  ps.forEach(function(p){ (t[p.turno] = t[p.turno] || []).push(p); });
+  return Object.keys(t).sort(function(a,b){return a-b;}).map(function(k){ return t[k].sort(function(a,b){return a.cancha-b.cancha;}); });
+}
+function rFixture(){
+  var s = $('#s-fixture');
+  if(!D.partidos.length){ s.innerHTML = '<div class="card vacio"><span class="disp">Fixture en armado</span>Lo publicamos cuando cierre la inscripción.</div>'; return; }
+  var eqs = D.equipos.slice().sort(function(a,b){return a.nombre.localeCompare(b.nombre);});
+  var ps = D.partidos.filter(function(p){ return !miEquipo || p.local===miEquipo || p.visitante===miEquipo || !p.local; });
+  s.innerHTML = '<div class="card"><label for="f-eq" style="margin-top:0">Ver mi equipo</label><select id="f-eq"><option value="">Todos los partidos</option>'
+    + eqs.map(function(e){ return '<option value="'+esc(e.id)+'"'+(e.id===miEquipo?' selected':'')+'>'+esc(e.nombre)+'</option>'; }).join('') + '</select>'
+    + (miEquipo ? '<div class="muted small" style="margin-top:6px">Mostrando los partidos de tu equipo y los cruces a definir.</div>' : '') + '</div>'
+    + agruparTurnos(ps).map(function(g){
+      return '<div class="turno"><div class="turno-h"><span class="hora">'+esc(g[0].hora)+'</span><span class="fase">Turno '+esc(g[0].turno)+' · '+esc(g[0].fase)+'</span></div>' + g.map(htmlPartido).join('') + '</div>';
+    }).join('');
+  $('#f-eq').onchange = function(){ miEquipo = this.value; try{ localStorage.setItem('naecitu-mi-equipo', miEquipo); }catch(e){} rFixture(); };
+}
+
+/* ============ Posiciones ============ */
+function tablas(){
+  var zonas = {};
+  D.partidos.filter(function(p){return p.fase==='Zona';}).forEach(function(p){
+    var z = zonas[p.zona] = zonas[p.zona] || {};
+    [p.local,p.visitante].forEach(function(id){ if(id && !z[id]) z[id] = {id:id,pj:0,g:0,e:0,p:0,gf:0,gc:0,pts:0}; });
+    if(p.gl===''||p.gl==null||p.gv===''||p.gv==null) return;
+    var a = z[p.local], b = z[p.visitante], gl=+p.gl, gv=+p.gv;
+    a.pj++; b.pj++; a.gf+=gl; a.gc+=gv; b.gf+=gv; b.gc+=gl;
+    if(gl>gv){a.g++;b.p++;a.pts+=3;} else if(gl<gv){b.g++;a.p++;b.pts+=3;} else {a.e++;b.e++;a.pts++;b.pts++;}
+  });
+  var out = {};
+  Object.keys(zonas).sort().forEach(function(z){
+    out[z] = Object.keys(zonas[z]).map(function(k){return zonas[z][k];}).sort(function(a,b){
+      return b.pts-a.pts || (b.gf-b.gc)-(a.gf-a.gc) || b.gf-a.gf || nombreEq(a.id).localeCompare(nombreEq(b.id));
+    });
+  });
+  return out;
+}
+function clasificanPorZona(){
+  var po = D.partidos.filter(function(p){return p.fase!=='Zona';});
+  var max = {};
+  po.forEach(function(p){ [p.etiquetaL,p.etiquetaV].forEach(function(l){ var m = /^(\d+)° (.+)$/.exec(l||''); if(m) max[m[2]] = Math.max(max[m[2]]||0, +m[1]); }); });
+  return max;
+}
+function rPosiciones(){
+  var s = $('#s-posiciones');
+  var T = tablas(), zs = Object.keys(T);
+  if(!zs.length){ s.innerHTML = '<div class="card vacio"><span class="disp">Sin partidos</span>Las tablas aparecen cuando se publique el fixture.</div>'; return; }
+  var cz = clasificanPorZona();
+  var po = D.partidos.filter(function(p){return p.fase!=='Zona';});
+  s.innerHTML = zs.map(function(z){
+    return '<div class="card"><h2>'+esc(z)+'</h2><div class="scroll"><table><thead><tr><th>#</th><th>Equipo</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>GF</th><th>GC</th><th>DG</th><th>Pts</th></tr></thead><tbody>'
+      + T[z].map(function(r,i){ return '<tr class="'+(i < (cz[z]||0) ? 'clasif' : '')+'"><td>'+(i+1)+'</td><td>'+esc(nombreEq(r.id))+'</td><td>'+r.pj+'</td><td>'+r.g+'</td><td>'+r.e+'</td><td>'+r.p+'</td><td>'+r.gf+'</td><td>'+r.gc+'</td><td>'+(r.gf-r.gc)+'</td><td class="pts">'+r.pts+'</td></tr>'; }).join('')
+      + '</tbody></table></div></div>';
+  }).join('')
+  + (po.length ? '<div class="card"><h2>Definición</h2>' + po.map(htmlPartido).join('') + '</div>' : '')
+  + '<p class="muted small">Desempate: puntos, diferencia de gol, goles a favor.</p>';
+}
+
+/* ============ Resolver cruces (admin) ============ */
+function resolverEtiqueta(l, T){
+  if(!l) return '';
+  var m = /^(\d+)° (.+)$/.exec(l);
+  if(m){ var r = (T[m[2]]||[])[+m[1]-1]; return r ? r.id : ''; }
+  m = /^Mejor (\d+)° #(\d+)$/.exec(l);
+  if(m){
+    var pos = +m[1]-1;
+    var cand = Object.keys(T).map(function(z){ var r=T[z][pos]; return r ? {id:r.id, ppp:r.pj?r.pts/r.pj:0, dg:r.pj?(r.gf-r.gc)/r.pj:0, gf:r.pj?r.gf/r.pj:0} : null; }).filter(Boolean)
+      .sort(function(a,b){ return b.ppp-a.ppp || b.dg-a.dg || b.gf-a.gf; });
+    return cand[+m[2]-1] ? cand[+m[2]-1].id : '';
+  }
+  m = /^(Ganador|Perdedor) (P\d+)$/.exec(l);
+  if(m){
+    var p = D.partidos.filter(function(x){return x.id===m[2];})[0]; if(!p) return '';
+    var g = ganador(p); if(!g || g==='E') return '';
+    var gan = g==='L' ? p.local : p.visitante, per = g==='L' ? p.visitante : p.local;
+    return m[1]==='Ganador' ? gan : per;
+  }
+  return '';
+}
+
+/* ============ Carga de resultados ============ */
+function guardarCarga(promesa, ok){
+  return promesa.then(function(d){ D = d; pintarHeader(); render(); toast(ok || 'Guardado'); }).catch(function(e){ toast(e.message.replace(/^Error:\s*/,'')); });
+}
+function rCarga(){
+  var s = $('#s-carga');
+  if(!PINR){
+    s.innerHTML = '<form class="card" id="f-pinr" style="max-width:360px"><h2>Carga de resultados</h2><label for="pinr">Contraseña</label><input type="password" id="pinr" inputmode="numeric" autocomplete="current-password"><button class="btn" style="margin-top:12px;width:100%">Entrar</button><div id="pinr-msg"></div></form>';
+    $('#f-pinr').onsubmit = function(e){
+      e.preventDefault(); var p = $('#pinr').value;
+      api('resultadosData', p).then(function(d){ PINR = p; D = d; rCarga(); }).catch(function(){ $('#pinr-msg').innerHTML = '<div class="msg err">Contraseña incorrecta</div>'; });
+    };
+    return;
+  }
+  s.innerHTML = '<div class="card row" style="justify-content:space-between"><h2 style="margin:0">Carga de resultados</h2><button type="button" class="btn ghost sm" id="c-salir">Salir</button></div><div id="carga"></div>';
+  $('#c-salir').onclick = function(){ PINR = null; rCarga(); };
+  aResultados($('#carga'), 'carga');
+}
+
+/* ============ Admin ============ */
+function rAdmin(){
+  var s = $('#s-admin');
+  if(!PIN){
+    s.innerHTML = '<form class="card" id="f-pin" style="max-width:360px"><h2>Panel de organización</h2><label for="pin">PIN</label><input type="password" id="pin" inputmode="numeric" autocomplete="current-password"><button class="btn" style="margin-top:12px;width:100%">Entrar</button><div id="pin-msg"></div></form>';
+    $('#f-pin').onsubmit = function(e){
+      e.preventDefault(); var p = $('#pin').value;
+      api('adminData', p).then(function(d){ PIN = p; aplicarAdmin(d); }).catch(function(){ $('#pin-msg').innerHTML = '<div class="msg err">PIN incorrecto</div>'; });
+    };
+    return;
+  }
+  var subs = [['equipos','Equipos'],['resultados','Resultados'],['fixture','Armar fixture'],['entradas','Entradas fiesta'],['puerta','Puerta'],['avisos','Avisos'],['config','Configuración']];
+  s.innerHTML = '<div class="sub-tabs">' + subs.map(function(x){ return '<button class="'+(adminSub===x[0]?'on':'')+'" data-s="'+x[0]+'">'+x[1]+'</button>'; }).join('') + '</div><div id="adm"></div>';
+  s.querySelectorAll('.sub-tabs button').forEach(function(b){ b.onclick = function(){ adminSub = b.dataset.s; rAdmin(); }; });
+  ({equipos:aEquipos, resultados:aResultados, fixture:aFixture, entradas:aEntradas, puerta:aPuerta, avisos:aAvisos, config:aConfig})[adminSub]();
+}
+function guardar(promesa, ok){
+  return promesa.then(function(d){ aplicarAdmin(d); toast((d && d.aviso) || ok || 'Guardado'); }).catch(function(e){ toast(e.message.replace(/^Error:\s*/,'')); });
+}
+function aEquipos(){
+  var E = A.equiposFull;
+  var c = function(est){ return E.filter(function(e){return e.estado===est;}).length; };
+  $('#adm').innerHTML = '<div class="card row"><b>'+c('confirmado')+'</b> confirmados · <b>'+c('pendiente')+'</b> pendientes · <b>'+c('espera')+'</b> en espera · <b>'+c('baja')+'</b> bajas</div>'
+    + (E.length ? E.map(function(e){
+      var f = e.jugadores.filter(function(j){return j.sexo==='F';}).length;
+      var wa = String(e.telefono).replace(/\D/g,''); if(wa && wa.indexOf('54')!==0) wa = '549' + wa.replace(/^0/,'').replace(/^15/,'');
+      return '<details class="adm-eq"><summary><span class="estado '+esc(e.estado)+'">'+esc(e.estado)+'</span> '+esc(e.nombre)+' <span class="muted small">· pago: '+esc(e.pago)+'</span>'+(e.comprobante ? ' <a class="comp" href="'+esc(e.comprobante)+'" target="_blank" rel="noopener">📎 comprobante</a>' : ' <span class="comp no">sin comprobante</span>')+'</summary>'
+        + '<div class="small" style="margin-top:8px">'+esc(e.club)+' · Capitán/a: <b>'+esc(e.capitan)+'</b> · '+esc(e.telefono)+' '+(wa?'<a href="https://wa.me/'+wa+'" target="_blank" rel="noopener">WhatsApp</a>':'')+' · '+esc(e.email)+'</div>'
+        + '<div class="small muted">Inscripto: '+esc(e.fecha)+' · '+e.jugadores.length+' jugadores ('+f+' M / '+(e.jugadores.length-f)+' V)</div>'
+        + (e.comprobante ? '<div class="small"><a href="'+esc(e.comprobante)+'" target="_blank" rel="noopener">Ver comprobante</a></div>' : '')
+        + '<ol class="small" style="margin:8px 0">' + e.jugadores.map(function(j){ return '<li>'+esc(nombreC(j))+' <span class="muted">· DNI '+esc(j.dni||'-')+' · '+(j.sexo==='F'?'M':'V')+(j.fiesta?' · 🎉':'')+'</span></li>'; }).join('') + '</ol>'
+        + '<div class="row"><select data-id="'+esc(e.id)+'" data-k="estado" style="width:auto">' + ['pendiente','confirmado','espera','baja'].map(function(x){ return '<option'+(x===e.estado?' selected':'')+'>'+x+'</option>'; }).join('') + '</select>'
+        + '<select data-id="'+esc(e.id)+'" data-k="pago" style="width:auto">' + ['no','comprobante','pagado'].map(function(x){ return '<option'+(x===e.pago?' selected':'')+'>'+x+'</option>'; }).join('') + '</select>'
+        + (e.estado==='confirmado' ? '<button class="btn ghost sm" data-mail="'+esc(e.id)+'">Reenviar mail</button>' : '<button class="btn verde sm" data-conf="'+esc(e.id)+'">Pago OK → confirmar y mandar mail</button>')
+        + '<button class="btn rojo sm" data-elim="'+esc(e.id)+'">Eliminar</button></div>'
+        + '<div class="small muted" style="margin-top:6px">Mail de confirmación: '+esc(e.mail||'no enviado')+'</div></details>';
+    }).join('') : '<div class="card vacio">Sin inscripciones todavía.</div>');
+  $('#adm').querySelectorAll('select[data-id]').forEach(function(sel){ sel.onchange = function(){ var c={}; c[sel.dataset.k]=sel.value; guardar(api('adminEquipo', PIN, sel.dataset.id, c)); }; });
+  $('#adm').querySelectorAll('[data-conf]').forEach(function(b){ b.onclick = function(){ b.disabled = true; guardar(api('adminEquipo', PIN, b.dataset.conf, {estado:'confirmado', pago:'pagado'}), 'Equipo confirmado'); }; });
+  $('#adm').querySelectorAll('[data-mail]').forEach(function(b){ b.onclick = function(){ b.disabled = true; guardar(api('adminReenviarMail', PIN, b.dataset.mail)); }; });
+  $('#adm').querySelectorAll('[data-elim]').forEach(function(b){ b.onclick = function(){ var e = E.filter(function(x){return x.id===b.dataset.elim;})[0]; if(confirm('¿Eliminar definitivamente a '+(e?e.nombre:'este equipo')+'?')) guardar(api('adminEliminarEquipo', PIN, b.dataset.elim), 'Equipo eliminado'); }; });
+}
+function aResultados(cont, modo){
+  cont = cont || $('#adm');
+  var carga = modo === 'carga', P = carga ? PINR : PIN, datos = carga ? D : A, g = carga ? guardarCarga : guardar;
+  var fRes = carga ? 'cargaResultado' : 'adminResultado', fCru = carga ? 'cargaCruces' : 'adminAsignarCruces';
+  if(!datos.partidos.length){ cont.innerHTML = '<div class="card vacio">Todavía no hay fixture cargado.</div>'; return; }
+  var T = tablas();
+  var pendientes = datos.partidos.filter(function(p){ return p.fase!=='Zona' && (resolverEtiqueta(p.etiquetaL,T)!==String(p.local||'') || resolverEtiqueta(p.etiquetaV,T)!==String(p.visitante||'')); });
+  cont.innerHTML = '<div class="card row" style="justify-content:space-between"><div><b>Cruces</b><div class="muted small">Completa los equipos de la definición según tablas y resultados cargados.</div></div><button class="btn sm" id="b-cruces"'+(pendientes.length?'':' disabled')+'>Actualizar cruces ('+pendientes.length+')</button></div>'
+    + agruparTurnos(datos.partidos).map(function(g){
+      return '<div class="turno-h"><span class="hora">'+esc(g[0].hora)+'</span><span class="fase">Turno '+g[0].turno+'</span></div>' + g.map(function(p){
+        var L = etiqueta(p,'L'), V = etiqueta(p,'V'), po = p.fase!=='Zona';
+        return '<div class="card" style="padding:10px;margin-bottom:6px"><div class="muted small">'+esc(p.id)+' · Cancha '+esc(p.cancha)+' · '+esc(p.zona||p.fase)+'</div>'
+          + '<div class="adm-res" data-id="'+esc(p.id)+'"><div class="small" style="text-align:right;font-weight:700">'+esc(L.t)+'</div>'
+          + '<input type="number" min="0" inputmode="numeric" value="'+esc(p.gl)+'" data-k="gl" aria-label="Goles '+esc(L.t)+'"><input type="number" min="0" inputmode="numeric" value="'+esc(p.gv)+'" data-k="gv" aria-label="Goles '+esc(V.t)+'">'
+          + '<div class="small" style="font-weight:700">'+esc(V.t)+'</div></div>'
+          + (po ? '<div class="adm-pen" data-id="'+esc(p.id)+'"><div class="small muted" style="text-align:right">penales</div><input type="number" min="0" value="'+esc(p.pl)+'" data-k="pl"><input type="number" min="0" value="'+esc(p.pv)+'" data-k="pv"><div></div></div>' : '')
+          + '<div class="row" style="justify-content:flex-end;margin-top:6px"><button class="btn sm" data-save="'+esc(p.id)+'">Guardar</button></div></div>';
+      }).join('');
+    }).join('');
+  cont.querySelector('#b-cruces').onclick = function(){
+    var T2 = tablas();
+    var lista = datos.partidos.filter(function(p){return p.fase!=='Zona';}).map(function(p){ return {id:p.id, local:resolverEtiqueta(p.etiquetaL,T2), visitante:resolverEtiqueta(p.etiquetaV,T2)}; });
+    g(api(fCru, P, lista), 'Cruces actualizados');
+  };
+  cont.querySelectorAll('[data-save]').forEach(function(b){ b.onclick = function(){
+    var id = b.dataset.save, r = {};
+    cont.querySelectorAll('[data-id="'+id+'"] input').forEach(function(i){ r[i.dataset.k] = i.value; });
+    g(api(fRes, P, id, r), 'Resultado guardado');
+  }; });
+}
+
+/* --- Calculadora: replica el motor del servidor --- */
+function zonasDe(n, formato, tam){
+  if(formato==='todos') return [n];
+  var k = Math.max(1, Math.round(n/tam)), base = Math.floor(n/k), resto = n%k;
+  return Array.from({length:k}, function(_,i){ return base + (i<resto?1:0); });
+}
+function calcular(n, formato, tam, Q){
+  var zs = zonasDe(n, formato, tam);
+  var grupos = zs.reduce(function(s,z){ return s + z*(z-1)/2; }, 0);
+  var po = Q>=8 ? 8 : Q>=4 ? 4 : Q>=2 ? 1 : 0;
+  var canchas = +cfg('canchas') || 2;
+  var porTurnoGrupos = Math.min(canchas, zs.reduce(function(s,z){return s+Math.floor(z/2);},0));
+  var turnosG = Math.ceil(grupos / porTurnoGrupos);
+  var turnosPO = Q>=8 ? Math.ceil(4/canchas) + Math.ceil(2/canchas) + Math.ceil(2/canchas) : Q>=4 ? Math.ceil(2/canchas)+Math.ceil(2/canchas) : Q>=2 ? 1 : 0;
+  var turnos = turnosG + turnosPO;
+  var min = Math.min.apply(null, zs) - 1;
+  return {zonas:zs, partidos:grupos+po, turnos:turnos, minutos:turnos*(+cfg('minutosTurno')||25), minPorEquipo:min};
+}
+function hm(min){ return Math.floor(min/60)+'h '+('0'+min%60).slice(-2); }
+function aFixture(){
+  var conf = A.equiposFull.filter(function(e){return e.estado==='confirmado';}).length;
+  var form = '<div class="card"><h2>Armar fixture</h2><div class="muted small">Usa los equipos <b>confirmados</b> ('+conf+'). Regenerar borra resultados cargados.</div>'
+    + '<div class="grid2"><div><label>Formato</label><select id="x-form"><option value="zonas">Zonas + definición</option><option value="todos">Todos contra todos</option></select></div>'
+    + '<div><label>Equipos por zona</label><select id="x-tam"><option>3</option><option selected>4</option><option>5</option></select></div>'
+    + '<div><label>Clasifican a definición</label><select id="x-q"><option value="0">Ninguno</option><option value="2">2 (final)</option><option value="4" selected>4 (semis)</option><option value="8">8 (cuartos)</option></select></div>'
+    + '<div><label>Sorteo</label><select id="x-sorteo"><option value="si">Sí, al azar</option><option value="no">No, por orden de inscripción</option></select></div></div>'
+    + '<div id="x-prev" class="msg ok" style="font-weight:500"></div>'
+    + '<button class="btn verde" id="x-gen" style="margin-top:12px">Generar fixture</button></div>'
+    + '<div class="card"><h2>¿Cuántos partidos?</h2><div class="muted small">'+esc(cfg('canchas'))+' canchas · turnos de '+esc(cfg('minutosTurno'))+' min (partido + cambio). Ajustable en Configuración.</div><div class="scroll"><table class="calc" id="x-tabla"></table></div></div>';
+  $('#adm').innerHTML = form;
+  var prev = function(){
+    var f = $('#x-form').value, t = +$('#x-tam').value, q = +$('#x-q').value;
+    $('#x-tam').disabled = f==='todos';
+    if(conf < 3){ $('#x-prev').className='msg err'; $('#x-prev').textContent = 'Necesitás al menos 3 equipos confirmados.'; $('#x-gen').disabled = true; }
+    else {
+      var r = calcular(conf, f, t, q);
+      $('#x-prev').className='msg ok';
+      $('#x-prev').innerHTML = '<b>'+conf+' equipos</b> → '+(f==='todos'?'zona única':r.zonas.length+' zonas ('+r.zonas.join('-')+')')+' · <b>'+r.partidos+' partidos</b> · '+r.turnos+' turnos · ~'+hm(r.minutos)+' de juego (termina ~'+sumarMin(cfg('horaInicio'), r.minutos)+') · mínimo '+r.minPorEquipo+' partidos por equipo';
+      $('#x-gen').disabled = false;
+    }
+    var filas = '';
+    for(var n=6;n<=20;n++){
+      var a = calcular(n,'todos',0,0), b = calcular(n,'zonas',4,n>=12?8:4), c = calcular(n,'zonas',3,n>=12?8:4);
+      filas += '<tr'+(n===conf?' style="background:var(--salvia)"':'')+'><td><b>'+n+'</b></td><td>'+a.partidos+' · '+hm(a.minutos)+'</td><td>'+b.zonas.join('-')+' → '+b.partidos+' · '+hm(b.minutos)+'</td><td>'+c.zonas.join('-')+' → '+c.partidos+' · '+hm(c.minutos)+'</td></tr>';
+    }
+    $('#x-tabla').innerHTML = '<thead><tr><th>Equipos</th><th>Todos c/ todos</th><th>Zonas de 4 + def.</th><th>Zonas de 3 + def.</th></tr></thead><tbody>'+filas+'</tbody>';
+  };
+  ['#x-form','#x-tam','#x-q'].forEach(function(s){ $(s).onchange = prev; });
+  prev();
+  $('#x-gen').onclick = function(){
+    if(A.partidos.length && !confirm('Ya hay un fixture. ¿Borrarlo y generar uno nuevo?')) return;
+    this.disabled = true;
+    guardar(api('adminGenerarFixture', PIN, {formato:$('#x-form').value, tamZona:+$('#x-tam').value, clasifican:+$('#x-q').value, sorteo:$('#x-sorteo').value==='si'}), 'Fixture generado')
+      .then(function(){ adminSub='resultados'; rAdmin(); });
+  };
+}
+function sumarMin(hhmm, m){ var p=String(hhmm||'09:00').split(':'); var t=(+p[0])*60+(+p[1]||0)+m; return ('0'+Math.floor(t/60)%24).slice(-2)+':'+('0'+t%60).slice(-2); }
+function aAvisos(){
+  $('#adm').innerHTML = '<form class="card" id="f-av"><h2>Nuevo aviso</h2><label for="av-t">Título</label><input type="text" id="av-t" maxlength="100" required>'
+    + '<label for="av-x">Mensaje</label><textarea id="av-x" rows="4" maxlength="3000"></textarea>'
+    + '<label class="check"><input type="checkbox" id="av-f"> Fijar arriba</label><button class="btn" style="margin-top:10px">Publicar</button></form>'
+    + '<div class="card"><h3>Compartir la app</h3><div class="row"><button class="btn verde sm" id="b-wa">Mandar link por WhatsApp</button><button class="btn ghost sm" id="b-link">Copiar link</button></div></div>'
+    + A.avisos.map(function(a){ return '<div class="card aviso"><div class="row" style="justify-content:space-between"><h3>'+esc(a.titulo)+'</h3><button class="btn rojo sm" data-del="'+esc(a.id)+'">Borrar</button></div><div class="muted small">'+esc(a.fecha)+'</div><p style="white-space:pre-wrap;margin:6px 0 0">'+esc(a.texto)+'</p></div>'; }).join('');
+  $('#f-av').onsubmit = function(e){ e.preventDefault(); guardar(api('adminAviso', PIN, {titulo:$('#av-t').value, texto:$('#av-x').value, fijado:$('#av-f').checked}), 'Aviso publicado'); };
+  $('#adm').querySelectorAll('[data-del]').forEach(function(b){ b.onclick = function(){ if(confirm('¿Borrar aviso?')) guardar(api('adminBorrarAviso', PIN, b.dataset.del), 'Aviso borrado'); }; });
+  var link = function(cb){ api('getUrl').then(cb).catch(function(){ cb(''); }); };
+  $('#b-wa').onclick = function(){ link(function(u){ window.open('https://wa.me/?text='+encodeURIComponent('🏑 Naecitu · Seven Mixto en '+cfg('sede')+'\nInscripción, fixture y resultados: '+u), '_blank'); }); };
+  $('#b-link').onclick = function(){ link(function(u){ (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){toast('Link copiado');}).catch(function(){ prompt('Link:', u); }); }); };
+}
+function aConfig(){
+  var campos = [
+    ['fecha','Fecha del torneo','date'],['horaInicio','Hora de inicio','time'],['minutosTurno','Minutos por turno (partido + cambio)','number'],['canchas','Canchas','number'],
+    ['cupo','Cupo de equipos','number'],['inscripcionAbierta','Inscripción abierta','sino'],
+    ['monto','Monto por equipo','text'],['alias','Alias','text'],['cvu','CVU','text'],['titular','Titular de la cuenta','text'],['infoPago','Instrucciones de pago','area'],
+    ['minJugadores','Mín. jugadores','number'],['maxJugadores','Máx. jugadores','number'],['minMujeres','Mín. mujeres en plantel','number'],['minVarones','Mín. varones en plantel','number'],
+    ['fiestaAbierta','Venta de entradas abierta','sino'],['maxPorCompra','Máx. entradas por compra','number'],['entradasEquipo','Entradas a la fiesta incluidas por equipo','number'],['urlPublica','Link público de la página (GitHub)','text'],['remitente','Mail remitente (alias de Gmail)','email'],['sede','Sede','text'],['contacto','Contacto','area'],['reglamento','Reglamento','area']
+  ];
+  $('#adm').innerHTML = '<form class="card" id="f-cfg"><h2>Configuración</h2><div class="grid2">' + campos.map(function(c){
+    var v = esc(cfg(c[0])), inp;
+    if(c[2]==='area') inp = '<textarea id="c-'+c[0]+'" rows="3">'+v+'</textarea>';
+    else if(c[2]==='sino') inp = '<select id="c-'+c[0]+'"><option value="si"'+(cfg(c[0])==='si'?' selected':'')+'>Sí</option><option value="no"'+(cfg(c[0])!=='si'?' selected':'')+'>No</option></select>';
+    else inp = '<input type="'+c[2]+'" id="c-'+c[0]+'" value="'+v+'">';
+    return '<div'+(c[2]==='area'?' style="grid-column:1/-1"':'')+'><label for="c-'+c[0]+'">'+c[1]+'</label>'+inp+'</div>';
+  }).join('') + '</div><button class="btn" style="margin-top:14px">Guardar configuración</button></form>'
+  + '<form class="card" id="f-pin2"><h3>Cambiar PIN</h3><div class="row"><input type="password" id="pin2" inputmode="numeric" placeholder="Nuevo PIN (4 a 8 números)" class="grow" style="width:auto"><button class="btn sm">Cambiar</button></div></form>'
+  + '<form class="card" id="f-pin3"><h3>Contraseña de Carga de resultados</h3><div class="muted small">Da acceso solo a cargar resultados y actualizar cruces.</div><div class="row" style="margin-top:8px"><input type="password" id="pin3" inputmode="numeric" placeholder="Nueva contraseña (4 a 8 números)" class="grow" style="width:auto"><button class="btn sm">Cambiar</button></div></form>';
+  $('#f-cfg').onsubmit = function(e){ e.preventDefault(); var o = {}; campos.forEach(function(c){ o[c[0]] = $('#c-'+c[0]).value; }); guardar(api('adminConfig', PIN, o)); };
+  $('#f-pin2').onsubmit = function(e){ e.preventDefault(); var n = $('#pin2').value; api('adminCambiarPin', PIN, n).then(function(){ PIN = n; toast('PIN cambiado'); $('#pin2').value=''; }).catch(function(er){ toast(er.message.replace(/^Error:\s*/,'')); }); };
+  $('#f-pin3').onsubmit = function(e){ e.preventDefault(); var n = $('#pin3').value; api('adminCambiarPinResultados', PIN, n).then(function(){ toast('Contraseña de carga cambiada'); $('#pin3').value=''; }).catch(function(er){ toast(er.message.replace(/^Error:\s*/,'')); }); };
+}
+
+cargar();
+setInterval(function(){ if(!PIN && TAB!=='inscripcion' && TAB!=='fiesta' && TAB!=='carga') api('getPublicData').then(function(d){ D=d; pintarHeader(); render(); }).catch(function(){}); }, 60000);
+</script>
+</body>
+</html>
