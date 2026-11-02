@@ -277,7 +277,6 @@ function pintarHeader(){
   var m = [];
   if(cfg('fecha')) m.push('📅 ' + fmtFecha(cfg('fecha')));
   m.push('⏰ ' + esc(cfg('horaInicio')) + ' h');
-  m.push('🏑 ' + ((D.conteo&&D.conteo.inscriptos)||0) + ' / ' + esc(cfg('cupo')) + ' equipos');
   $('#h-meta').innerHTML = m.map(function(x){ return '<span class="chip">'+x+'</span>'; }).join('');
 }
 function render(){
