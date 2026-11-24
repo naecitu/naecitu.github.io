@@ -150,6 +150,11 @@ td.pts{font-weight:700;color:var(--azul)}
 .adm-pen input{text-align:center;padding:4px;font-size:13px}
 .calc td,.calc th{text-align:center}
 .sub-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.kpi{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--blanco);border:1px solid var(--linea);border-radius:var(--r);padding:12px 8px}
+.kpi .ic{font-size:26px;line-height:1}
+.kpi .num{font-family:'Bangers',cursive;font-size:34px;letter-spacing:.04em;color:var(--azul);line-height:1}
+.kpi.f .num{color:var(--oliva)}
 .sub-tabs button{border:1.5px solid var(--linea);background:#fff;border-radius:999px;padding:6px 12px;font-weight:700;color:var(--gris);cursor:pointer}
 .sub-tabs button.on{border-color:var(--azul);color:var(--azul)}
 .loader{text-align:center;padding:50px;color:var(--gris)}
@@ -719,6 +724,37 @@ function rCarga(){
 }
 
 /* ============ Admin ============ */
+/* Gente confirmada: jugadores de equipos confirmados + asistentes de entradas confirmadas, sin repetir DNI.
+   Las entradas sueltas no tienen sexo: se estima por el nombre. */
+var NOMBRES_F = /^(luz|rocio|rocío|ines|inés|pilar|sol|abril|belen|belén|maite|carmen|isabel|raquel|ruth|mercedes|lourdes|dolores|beatriz|agnes|iris|zoe|noelia|guadalupe|malen|malén|denise|jazmin|jazmín|abigail|ivonne|solange|clarisse|tiziana|naiara|ailen|ailén|aylen|milagros|rosario|consuelo|socorro|nieves|soledad|trinidad|caridad|paz|flor|maribel|anabel|cristel|ester|esther|nicole|michelle|valery|ashley|charlotte)$/;
+var NOMBRES_M = /^(luca|bautista|nicola|joshua|santa)$/;
+function sexoPorNombre(n){
+  n = String(n||'').trim().split(/\s+/)[0].toLowerCase();
+  if(NOMBRES_M.test(n)) return 'M';
+  return (NOMBRES_F.test(n) || /a$/.test(n)) ? 'F' : 'M';
+}
+function contarGente(){
+  var sexo = {};
+  (A.equiposFull||[]).forEach(function(e){
+    if(e.estado!=='confirmado') return;
+    (e.jugadores||[]).forEach(function(j){ if(j.dni) sexo[String(j.dni)] = j.sexo==='F' ? 'F' : 'M'; });
+  });
+  (A.entradasFull||[]).forEach(function(e){
+    if(e.estado!=='confirmado') return;
+    (e.asistentes||[]).forEach(function(a){ if(a && a.dni && !sexo[String(a.dni)]) sexo[String(a.dni)] = sexoPorNombre(a.nombre); });
+  });
+  var v = Object.keys(sexo).map(function(k){ return sexo[k]; });
+  var f = v.filter(function(x){ return x==='F'; }).length;
+  return {total:v.length, f:f, m:v.length-f};
+}
+function kpisHtml(){
+  var c = contarGente();
+  return '<div class="kpis">'
+    + '<div class="kpi" title="Total"><span class="ic" aria-hidden="true">👥</span><span class="num" aria-label="Total">'+c.total+'</span></div>'
+    + '<div class="kpi m" title="Hombres"><span class="ic" aria-hidden="true">👨</span><span class="num" aria-label="Hombres">'+c.m+'</span></div>'
+    + '<div class="kpi f" title="Mujeres"><span class="ic" aria-hidden="true">👩</span><span class="num" aria-label="Mujeres">'+c.f+'</span></div>'
+    + '</div>';
+}
 function rAdmin(){
   var s = $('#s-admin');
   if(!PIN){
@@ -730,7 +766,7 @@ function rAdmin(){
     return;
   }
   var subs = [['equipos','Equipos'],['resultados','Resultados'],['fixture','Armar fixture'],['entradas','Entradas fiesta'],['puerta','Puerta'],['avisos','Avisos'],['config','Configuración']];
-  s.innerHTML = '<div class="sub-tabs">' + subs.map(function(x){ return '<button class="'+(adminSub===x[0]?'on':'')+'" data-s="'+x[0]+'">'+x[1]+'</button>'; }).join('') + '</div><div id="adm"></div>';
+  s.innerHTML = kpisHtml() + '<div class="sub-tabs">' + subs.map(function(x){ return '<button class="'+(adminSub===x[0]?'on':'')+'" data-s="'+x[0]+'">'+x[1]+'</button>'; }).join('') + '</div><div id="adm"></div>';
   s.querySelectorAll('.sub-tabs button').forEach(function(b){ b.onclick = function(){ adminSub = b.dataset.s; rAdmin(); }; });
   ({equipos:aEquipos, resultados:aResultados, fixture:aFixture, entradas:aEntradas, puerta:aPuerta, avisos:aAvisos, config:aConfig})[adminSub]();
 }
