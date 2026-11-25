@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Naecitu · Seven Mixto · Club San Fernando</title>
-<meta name="description" content="Torneo de hockey seven mixto en Club San Fernando. Inscripción de equipos, entradas para la fiesta, fixture y resultados.">
+<meta name="description" content="Torneo de hockey seven mixto en Club San Fernando. Inscripción de equipos, entradas para el After, fixture y resultados.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Naecitu · Seven Mixto">
-<meta property="og:description" content="Sábado 5 de diciembre · Club San Fernando. Inscribí tu equipo y comprá tus entradas para la fiesta.">
+<meta property="og:description" content="Sábado 5 de diciembre · Club San Fernando. Inscribí tu equipo y comprá tus entradas para el After.">
 <meta property="og:image" content="https://naecitu.github.io/logo.png">
 <meta property="og:url" content="https://naecitu.github.io/">
 <meta name="theme-color" content="#173c6f">
@@ -31,7 +31,7 @@ button,input,select,textarea{font:inherit}
 /* header */
 header{background:var(--azul);color:#fff;position:relative;overflow:hidden}
 header::after{content:"";position:absolute;left:-10%;right:-10%;bottom:-38px;height:70px;background:var(--crema);border-radius:50% 50% 0 0}
-.hero{display:flex;align-items:center;gap:18px;padding:18px 0 46px;position:relative;z-index:1}
+.hero{display:flex;align-items:center;gap:18px;padding:18px 16px 46px;position:relative;z-index:1}
 .hero img{width:96px;height:auto;flex:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.25))}
 .hero h1{color:#fff;font-size:44px;line-height:.95}
 .hero .sub{color:var(--salvia);font-weight:600;margin-top:4px}
@@ -84,7 +84,7 @@ input[type=text],input[type=tel],input[type=email],input[type=number],input[type
   width:100%;padding:10px 12px;border:1.5px solid var(--linea);border-radius:10px;background:#fff;color:var(--tinta)}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--azul)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
-@media(max-width:560px){.grid2{grid-template-columns:1fr}}
+@media(max-width:560px){.grid2{grid-template-columns:1fr}.hero{gap:14px}.hero img{width:80px}.hero h1{font-size:38px}}
 .jug{display:grid;grid-template-columns:28px 1fr 92px 32px;gap:8px;align-items:center;margin-bottom:6px}
 .jug .n{color:var(--gris);font-weight:700;text-align:right}
 .sexo{display:flex;border:1.5px solid var(--linea);border-radius:10px;overflow:hidden}
@@ -205,7 +205,7 @@ td.pts{font-weight:700;color:var(--azul)}
 <nav><div class="wrap tabs" role="tablist" id="tabs">
   <button class="tab" data-t="inicio" aria-selected="true">Inicio</button>
   <button class="tab cta" data-t="inscripcion" aria-selected="false">Inscribirse</button>
-  <button class="tab" data-t="fiesta" aria-selected="false">Fiesta 🎉</button>
+  <button class="tab" data-t="fiesta" aria-selected="false">Entradas After</button>
   <button class="tab" data-t="fixture" aria-selected="false">Fixture</button>
   <button class="tab" data-t="posiciones" aria-selected="false">Posiciones</button>
   <button class="tab" data-t="carga" aria-selected="false">Carga de resultados</button>
@@ -358,14 +358,14 @@ function rInscripcion(){
     + '<div><label for="i-tel">WhatsApp *</label><input type="tel" id="i-tel" maxlength="30" placeholder="11 1234-5678" required></div></div>'
     + '<label for="i-mail">Email * <span class="muted" style="font-weight:400">(ahí llega la confirmación)</span></label><input type="email" id="i-mail" maxlength="80" required>'
     + '<h2 style="margin-top:18px">Plantel</h2><div class="muted small">Mínimo '+esc(cfg('minMujeres'))+' mujeres y '+esc(cfg('minVarones'))+' varones · desde '+min+' jugadores, sin límite</div>'
-    + '<div class="muted small" style="margin-top:4px">Marcá con 🎉 a quienes usan las '+esc(cfg('entradasEquipo')||7)+' entradas a la fiesta incluidas. <b>Para entrar a la fiesta se escanea el DNI</b>, así que cargalo bien.</div>'
+    + '<div class="muted small" style="margin-top:4px">Marcá con 🎉 a quienes usan las '+esc(cfg('entradasEquipo')||7)+' entradas al After incluidas. <b>Para entrar al After se escanea el DNI</b>, así que cargalo bien.</div>'
     + '<div class="contador" id="i-cont"></div><div id="i-jug"></div>'
     + '<button type="button" class="btn ghost sm" id="i-add">+ Agregar jugador/a</button>'
     + '<div style="margin-top:18px">' + bloquePago() + '</div>'
     + '<h2 style="margin-top:18px">Comprobante de pago</h2>'
     + '<div class="muted small">Imagen o PDF, hasta 5 MB. Si todavía no pagaste, podés mandarlo después por WhatsApp.</div>'
     + '<input type="file" id="i-comp" accept="image/*,application/pdf" style="margin-top:8px">'
-    + '<label class="check"><input type="checkbox" id="i-ok"> <span>Entiendo que la inscripción es un monto fijo por equipo que incluye 7 entradas a la fiesta (las entradas adicionales se pagan aparte) y que el equipo queda inscripto recién cuando la organización valida el pago.</span></label>'
+    + '<label class="check"><input type="checkbox" id="i-ok"> <span>Entiendo que la inscripción es un monto fijo por equipo que incluye 7 entradas al After (las entradas adicionales se pagan aparte) y que el equipo queda inscripto recién cuando la organización valida el pago.</span></label>'
     + '<button class="btn verde" style="width:100%;margin-top:16px;padding:14px" id="i-send">Enviar inscripción</button>'
     + '<div id="i-msg"></div></form>';
   pintarJugadores();
@@ -381,13 +381,13 @@ function pintarJugadores(){
       + '<input type="text" class="nm" placeholder="Apellido" value="'+esc(j.apellido)+'" data-i="'+i+'" data-k="apellido" maxlength="40" aria-label="Apellido jugador '+(i+1)+'">'
       + '<input type="text" class="dn" inputmode="numeric" placeholder="DNI" value="'+esc(j.dni)+'" data-i="'+i+'" data-k="dni" maxlength="12" aria-label="DNI jugador '+(i+1)+'">'
       + '<div class="sexo"><button type="button" class="F'+(j.sexo==='F'?' on':'')+'" data-i="'+i+'" data-s="F" aria-label="Mujer">M</button><button type="button" class="M'+(j.sexo==='M'?' on':'')+'" data-i="'+i+'" data-s="M" aria-label="Varón">V</button></div>'
-      + '<label class="fiesta-chk" title="Usa una de las entradas a la fiesta"><input type="checkbox" data-f="'+i+'"'+(j.fiesta?' checked':'')+' aria-label="Entrada a la fiesta jugador '+(i+1)+'">🎉</label>'
+      + '<label class="fiesta-chk" title="Usa una de las entradas al After"><input type="checkbox" data-f="'+i+'"'+(j.fiesta?' checked':'')+' aria-label="Entrada al After jugador '+(i+1)+'">🎉</label>'
       + '<button type="button" class="x" data-del="'+i+'" aria-label="Quitar">×</button></div>';
   }).join('');
   $('#i-jug').querySelectorAll('input[data-k]').forEach(function(el){ el.oninput = function(){ jugadores[+el.dataset.i][el.dataset.k] = el.value; contar(); }; });
   $('#i-jug').querySelectorAll('input[data-f]').forEach(function(el){ el.onchange = function(){
     var usadas = jugadores.filter(function(j){return j.fiesta;}).length;
-    if(el.checked && usadas >= maxF){ el.checked = false; toast('La inscripción incluye '+maxF+' entradas. Las demás se compran en la pestaña Fiesta.'); return; }
+    if(el.checked && usadas >= maxF){ el.checked = false; toast('La inscripción incluye '+maxF+' entradas. Las demás se compran en la pestaña Entradas After.'); return; }
     jugadores[+el.dataset.f].fiesta = el.checked; contar();
   }; });
   $('#i-jug').querySelectorAll('.sexo button').forEach(function(b){ b.onclick = function(){ jugadores[+b.dataset.i].sexo = b.dataset.s; pintarJugadores(); }; });
@@ -401,7 +401,7 @@ function contar(){
   var cl = function(ok){ return ok ? 'ok' : 'mal'; };
   $('#i-cont').innerHTML = '<span class="'+cl(v.length>=+cfg('minJugadores'))+'">'+v.length+' jugadores</span>'
     + '<span class="'+cl(f>=+cfg('minMujeres'))+'">'+f+' mujeres</span><span class="'+cl(m>=+cfg('minVarones'))+'">'+m+' varones</span>'
-    + '<span class="ok">🎉 '+jugadores.filter(function(j){return j.fiesta;}).length+' / '+(+cfg('entradasEquipo')||7)+' entradas a la fiesta</span>';
+    + '<span class="ok">🎉 '+jugadores.filter(function(j){return j.fiesta;}).length+' / '+(+cfg('entradasEquipo')||7)+' entradas al After</span>';
 }
 function leerComprobante(e){
   var file = e.target.files[0]; comprobante = null;
@@ -444,7 +444,7 @@ function enviarInscripcion(ev){
 var compraEnt = null, asistentes = [{nombre:'',apellido:'',dni:''}], cantEnt = 1;
 function fmtPesos(n){ return '$ ' + Number(n||0).toLocaleString('es-AR'); }
 function nombreC(j){ return ((j.nombre||'')+' '+(j.apellido||'')).trim(); }
-function dniOk(d){ d = String(d||'').replace(/\D/g,''); return d.length>=6 && d.length<=9; }
+function dniOk(d){ d = String(d||'').replace(/\D/g,''); return d.length>=7 && d.length<=8; }
 function aliasHtml(){
   return (cfg('alias') ? '<div class="small" style="margin-top:8px;opacity:.85">Alias</div><div class="row"><div class="alias grow">'+esc(cfg('alias'))+'</div><button type="button" class="btn sm" onclick="copiarAlias()">Copiar alias</button></div>' : '<p class="small">El alias se publica en breve.</p>')
     + (cfg('cvu') ? '<div class="small" style="margin-top:8px;opacity:.85">CVU</div><div class="row"><div class="cvu grow">'+esc(cfg('cvu'))+'</div><button type="button" class="btn sm" onclick="copiarTexto(cfg(\'cvu\'),\'CVU copiado\')">Copiar CVU</button></div>' : '')
@@ -461,7 +461,7 @@ function rFiesta(){
   var s = $('#s-fiesta');
   if(s.dataset.ok) return;
   var F = D.fiesta || {tandas:[], activa:-1, abierta:false, maxPorCompra:10};
-  var head = '<div class="card fiesta"><h2>Fiesta · Barra libre</h2>'
+  var head = '<div class="card fiesta"><h2>Entradas After · Barra libre</h2>'
     + '<p style="margin:4px 0 12px">El after del Naecitu con <b>barra libre</b>'+(cfg('fecha')?' · '+fmtFecha(cfg('fecha')):'')+'. Las entradas se venden en preventas: cuando se agota una, empieza la siguiente.</p>'
     + tandasHtml(F)
     + '<p class="small" style="margin:12px 0 0">🪪 <b>Para entrar se escanea el DNI.</b> Tiene que coincidir con el que se cargó al comprar la entrada o en la inscripción del equipo. Traé el DNI físico. Solo mayores de 18.</p></div>';
@@ -532,7 +532,7 @@ function aEntradas(){
   var E = A.entradasFull || [], F = A.fiestaAdmin || D.fiesta || {tandas:[]};
   var suma = function(arr, k){ return arr.reduce(function(s,e){ return s + (+e[k]||0); }, 0); };
   var vivas = E.filter(function(e){ return e.estado!=='baja'; }), conf = E.filter(function(e){ return e.estado==='confirmado'; });
-  var resumen = '<div class="card"><h2>Entradas fiesta</h2><div class="row small" style="margin-bottom:10px"><span><b>'+suma(vivas,'cantidad')+'</b> reservadas</span><span>· <b>'+suma(conf,'cantidad')+'</b> confirmadas</span><span>· <b>'+fmtPesos(suma(conf,'total'))+'</b> cobrado</span></div>' + tandasHtml(F) + '</div>';
+  var resumen = '<div class="card"><h2>Entradas After</h2><div class="row small" style="margin-bottom:10px"><span><b>'+suma(vivas,'cantidad')+'</b> reservadas</span><span>· <b>'+suma(conf,'cantidad')+'</b> confirmadas</span><span>· <b>'+fmtPesos(suma(conf,'total'))+'</b> cobrado</span></div>' + tandasHtml(F) + '</div>';
   var lista = E.length ? E.map(function(e){
     var wa = String(e.telefono).replace(/\D/g,''); if(wa && wa.indexOf('54')!==0) wa = '549' + wa.replace(/^0/,'').replace(/^15/,'');
     return '<details class="adm-eq"><summary><span class="estado '+esc(e.estado)+'">'+esc(e.estado)+'</span> '+esc(e.nombre)+' · '+esc(e.cantidad)+' × '+esc(e.tanda)+' <span class="muted small">· '+fmtPesos(e.total)+' · pago: '+esc(e.pago)+'</span>'+(e.comprobante ? ' <a class="comp" href="'+esc(e.comprobante)+'" target="_blank" rel="noopener">📎 comprobante</a>' : ' <span class="comp no">sin comprobante</span>')+'</summary>'
@@ -770,7 +770,7 @@ function rAdmin(){
     };
     return;
   }
-  var subs = [['equipos','Equipos'],['resultados','Resultados'],['fixture','Armar fixture'],['entradas','Entradas fiesta'],['puerta','Puerta'],['avisos','Avisos'],['config','Configuración']];
+  var subs = [['equipos','Equipos'],['resultados','Resultados'],['fixture','Armar fixture'],['entradas','Entradas After'],['puerta','Puerta'],['avisos','Avisos'],['config','Configuración']];
   s.innerHTML = '<div class="sub-tabs">' + subs.map(function(x){ return '<button class="'+(adminSub===x[0]?'on':'')+'" data-s="'+x[0]+'">'+x[1]+'</button>'; }).join('') + '</div>' + kpisHtml() + '<div id="adm"></div>';
   s.querySelectorAll('.sub-tabs button').forEach(function(b){ b.onclick = function(){ adminSub = b.dataset.s; rAdmin(); }; });
   ({equipos:aEquipos, resultados:aResultados, fixture:aFixture, entradas:aEntradas, puerta:aPuerta, avisos:aAvisos, config:aConfig})[adminSub]();
@@ -907,7 +907,7 @@ function aConfig(){
     ['cupo','Cupo de equipos','number'],['inscripcionAbierta','Inscripción abierta','sino'],
     ['monto','Monto por equipo','text'],['alias','Alias','text'],['cvu','CVU','text'],['titular','Titular de la cuenta','text'],['infoPago','Instrucciones de pago','area'],
     ['minJugadores','Mín. jugadores','number'],['maxJugadores','Máx. jugadores','number'],['minMujeres','Mín. mujeres en plantel','number'],['minVarones','Mín. varones en plantel','number'],
-    ['fiestaAbierta','Venta de entradas abierta','sino'],['maxPorCompra','Máx. entradas por compra','number'],['entradasEquipo','Entradas a la fiesta incluidas por equipo','number'],['urlPublica','Link público de la página (GitHub)','text'],['remitente','Mail remitente (alias de Gmail)','email'],['sede','Sede','text'],['contacto','Contacto','area'],['reglamento','Reglamento','area']
+    ['fiestaAbierta','Venta de entradas abierta','sino'],['maxPorCompra','Máx. entradas por compra','number'],['entradasEquipo','Entradas al After incluidas por equipo','number'],['urlPublica','Link público de la página (GitHub)','text'],['remitente','Mail remitente (alias de Gmail)','email'],['sede','Sede','text'],['contacto','Contacto','area'],['reglamento','Reglamento','area']
   ];
   $('#adm').innerHTML = '<form class="card" id="f-cfg"><h2>Configuración</h2><div class="grid2">' + campos.map(function(c){
     var v = esc(cfg(c[0])), inp;
