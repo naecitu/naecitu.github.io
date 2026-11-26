@@ -115,7 +115,7 @@ td.pts{font-weight:700;color:var(--azul)}
 .turno-h{display:flex;align-items:baseline;gap:10px;margin:14px 0 6px}
 .turno-h .hora{font-family:'Bangers';font-size:24px;color:var(--azul);letter-spacing:.05em}
 .turno-h .fase{font-size:13px;font-weight:700;color:var(--gris);text-transform:uppercase;letter-spacing:.05em}
-.partido{display:grid;grid-template-columns:62px 1fr auto 1fr;gap:8px;align-items:center;background:#fff;border:1px solid var(--linea);border-radius:12px;padding:10px 12px;margin-bottom:6px}
+.partido{display:grid;grid-template-columns:78px 1fr auto 1fr;gap:8px;align-items:center;background:#fff;border:1px solid var(--linea);border-radius:12px;padding:10px 12px;margin-bottom:6px}
 .partido .cancha{font-size:12px;font-weight:700;color:var(--gris);text-transform:uppercase;line-height:1.1}
 .partido .cancha b{display:block;font-size:11px;color:var(--oliva)}
 .partido .eq{font-weight:700}
@@ -126,7 +126,7 @@ td.pts{font-weight:700;color:var(--azul)}
 .partido .res.vs{font-family:'Barlow';font-size:13px;color:var(--gris);font-weight:700}
 .partido .pen{display:block;font-family:'Barlow';font-size:11px;color:var(--gris)}
 .partido.mio{border-color:var(--oliva);box-shadow:0 0 0 2px var(--salvia)}
-@media(max-width:480px){.partido{grid-template-columns:44px 1fr auto 1fr;padding:8px}.partido .res{min-width:52px}}
+@media(max-width:480px){.partido{grid-template-columns:62px 1fr auto 1fr;padding:8px}.partido .res{min-width:52px}}
 .vacio{text-align:center;padding:34px 16px;color:var(--gris)}
 .vacio .disp{font-size:26px;color:var(--oliva);display:block;margin-bottom:4px}
 
@@ -186,6 +186,19 @@ td.pts{font-weight:700;color:var(--azul)}
 .prow.in{opacity:.55}
 .comp{font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;background:#e4eefb;color:var(--azul);text-decoration:none}
 .comp.no{background:#f6dfd9;color:var(--rojo)}
+/* mapas de canchas */
+.mapas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.mapa{background:#fff;border:1px solid var(--linea);border-radius:var(--r);padding:12px}
+.mapa h3{font-size:20px;margin-bottom:6px}
+.mapa svg{display:block;width:100%;max-width:280px;height:auto;margin:0 auto}
+.mapa .nota{font-size:13px;color:var(--gris);margin-top:6px;line-height:1.35}
+.mapa-ev svg{display:block;width:100%;max-width:620px;height:auto;margin:4px auto 0}
+.flecha-vest{animation:vest 1.4s ease-in-out infinite}
+@keyframes vest{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+@media (prefers-reduced-motion:reduce){.flecha-vest{animation:none}}
+.ley{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;margin-top:10px;font-size:14px;font-weight:600}
+.ley span{display:inline-flex;align-items:center;gap:6px}
+.ley i{width:14px;height:14px;border-radius:4px;display:inline-block}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--tinta);color:#fff;padding:10px 16px;border-radius:10px;font-weight:600;z-index:20;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.on{opacity:1}
 </style>
@@ -324,13 +337,124 @@ function copiarAlias(){
   (navigator.clipboard ? navigator.clipboard.writeText(a) : Promise.reject()).then(function(){ toast('Alias copiado'); })
     .catch(function(){ prompt('Copiá el alias:', a); });
 }
+/* Árboles vistos desde arriba: varias formas (inspiradas en una lámina de árboles en planta) */
+function arbol(x, y, r, i){
+  var s = (i+1)*9301 % 233280; var rnd = function(){ s = (s*9301 + 49297) % 233280; return s/233280; };
+  var P = [['#3f7a33','#5d9c45','#86c25e'],['#4f8a3c','#78b85a','#a2d47a']][i%2];
+  var f = function(n){ return n.toFixed(1); };
+  var circ = function(cx, cy, rr, c){ return '<circle cx="'+f(cx)+'" cy="'+f(cy)+'" r="'+f(rr)+'" fill="'+c+'"/>'; };
+  var ondas = function(rr, n, amp, c, irreg){ // borde festoneado
+    var d = '', a0 = rnd()*6.28;
+    for(var k=0;k<=n;k++){ var a = a0 + k*6.283/n, rk = rr*(irreg ? .85+rnd()*.3 : 1);
+      var px = x+rk*Math.cos(a), py = y+rk*Math.sin(a);
+      if(!k) d += 'M'+f(px)+' '+f(py);
+      else { var am = a - 3.1416/n, rc = rr*(1+amp)*(irreg ? .9+rnd()*.3 : 1); d += ' Q'+f(x+rc*Math.cos(am))+' '+f(y+rc*Math.sin(am))+' '+f(px)+' '+f(py); }
+    }
+    return '<path d="'+d+'Z" fill="'+c+'"/>';
+  };
+  var puntas = function(cx, cy, rr, n, inner, c){ var pts=[]; for(var k=0;k<n*2;k++){ var a=k*3.1416/n, q=k%2?rr*inner:rr; pts.push(f(cx+q*Math.cos(a))+','+f(cy+q*Math.sin(a))); } return '<polygon points="'+pts.join(' ')+'" fill="'+c+'"/>'; };
+  var ramas = function(rr, c, w){ var o=''; for(var k=0;k<5;k++){ var a=k*1.2566+rnd()*.5, ex=x+rr*.85*Math.cos(a), ey=y+rr*.85*Math.sin(a), mx=x+rr*.45*Math.cos(a), my=y+rr*.45*Math.sin(a);
+      o += '<path d="M'+f(x)+' '+f(y)+' L'+f(ex)+' '+f(ey)+' M'+f(mx)+' '+f(my)+' L'+f(mx+rr*.35*Math.cos(a+.7))+' '+f(my+rr*.35*Math.sin(a+.7))+'" stroke="'+c+'" stroke-width="'+w+'" stroke-linecap="round" fill="none"/>'; } return o; };
+  var sombra = '<ellipse cx="'+f(x+3)+'" cy="'+f(y+r*.75)+'" rx="'+f(r*1.05)+'" ry="'+f(r*.45)+'" fill="rgba(40,60,30,.18)"/>';
+  var tipo = (i*5)%7 < 4 ? 0 : 3, o = '';
+  if(tipo===0) o = ondas(r, 14, .12, P[0]) + ondas(r*.72, 11, .1, P[1]) + circ(x, y, r*.38, P[2]);                      // festoneado con anillos
+  else if(tipo===1) o = circ(x, y, r, P[0]) + circ(x-r*.12, y-r*.1, r*.78, P[1]) + circ(x-r*.2, y-r*.18, r*.42, P[2]);  // copa lisa
+  else if(tipo===2) o = circ(x, y, r, P[1]) + '<circle cx="'+f(x)+'" cy="'+f(y)+'" r="'+f(r*.92)+'" fill="none" stroke="'+P[0]+'" stroke-width="1.5"/>' + ramas(r, '#8a5a3c', 1.1); // con ramas
+  else if(tipo===3) { o = circ(x, y, r*.85, P[0]); for(var k=0;k<7;k++){ var a=k*.8976+rnd()*.3, cx=x+r*.6*Math.cos(a), cy=y+r*.6*Math.sin(a), rr=r*(.38+rnd()*.12); o += circ(cx, cy, rr, P[0]) + circ(cx-rr*.25, cy-rr*.25, rr*.6, P[1]); } o += circ(x, y, r*.42, P[1]) + circ(x-r*.1, y-r*.1, r*.22, P[2]); } // burbujas
+  else if(tipo===4) o = puntas(x, y, r*1.1, 26, .3, P[1]) + puntas(x, y, r*.6, 18, .35, P[0]) + circ(x, y, r*.15, P[0]);   // palmera
+  else if(tipo===5) { o = circ(x, y, r*.8, P[0]); for(var k2=0;k2<5;k2++){ var a2=k2*1.2566, cx2=x+r*.5*Math.cos(a2), cy2=y+r*.5*Math.sin(a2); o += puntas(cx2, cy2, r*.55, 9, .6, P[0]) + circ(cx2, cy2, r*.25, P[1]); } o += puntas(x, y, r*.5, 9, .6, P[1]) + circ(x, y, r*.2, P[2]); } // pinchudo
+  else if(tipo===6) { o = ramas(r, '#8a5a3c', 1); for(var k3=0;k3<16;k3++){ var a3=k3*.3927+rnd()*.2, rr3=r*(.75+rnd()*.25); o += circ(x+rr3*Math.cos(a3), y+rr3*Math.sin(a3), r*(.12+rnd()*.08), k3%2?P[1]:P[2]); } } // ralo con hojitas
+  else o = ondas(r, 9, .28, P[0], true) + ondas(r*.68, 8, .25, P[1], true) + circ(x, y, r*.3, P[2]);                    // irregular
+  return '<g>' + sombra + o + '</g>';
+}
+/* Arboledas: hileras de árboles superpuestos a lo largo de segmentos [x0,y0,x1,y1,cantidad,rmin,rmax] */
+function bosque(){
+  var s = 7; var rnd = function(){ s = (s*9301 + 49297) % 233280; return s/233280; };
+  var tramos = [
+    [14,214,212,218,16,12,15],[22,234,206,238,14,10,13],   // entre rugby y hockey (doble hilera)
+    [242,12,246,296,20,12,15],[262,30,264,276,12,9,12],    // izquierda del camino
+    [338,12,342,296,20,12,15],                               // derecha del camino
+    [568,22,568,448,26,8,10],                                // borde de la cancha de fútbol
+    [486,302,576,306,9,9,12],                                // detrás del After
+    [400,370,428,384,4,9,11],                                // al lado del After
+    [440,404,442,652,18,10,13],                              // entre el río y el tenis
+    [164,580,236,590,7,12,15],[176,606,230,612,4,10,12],     // al lado de la parrilla
+    [16,644,236,652,16,10,13]                                // abajo
+  ];
+  var lista = [];
+  tramos.forEach(function(t){
+    for(var k=0;k<t[4];k++){
+      var u = t[4]>1 ? k/(t[4]-1) : .5;
+      lista.push([t[0]+(t[2]-t[0])*u + (rnd()-.5)*6, t[1]+(t[3]-t[1])*u + (rnd()-.5)*8, t[5]+rnd()*(t[6]-t[5])]);
+    }
+  });
+  lista.sort(function(a,b){ return a[1]-b[1]; });
+  return lista.map(function(t, i){ return arbol(t[0], t[1], t[2], i); }).join('');
+}
+function mapaEvento(){
+  var c = mapasCanchas(true);
+  var anidar = function(svg, x, y, w, hh){ return svg.replace('<svg ', '<svg x="'+x+'" y="'+y+'" width="'+w+'" height="'+hh+'" '); };
+  var F = 'Barlow,system-ui,sans-serif';
+  var pill = function(x, y, t, col, w){ w = w || (t.length*8+26); return '<g><rect x="'+(x-w/2)+'" y="'+(y-14)+'" width="'+w+'" height="28" rx="14" fill="'+col+'" stroke="#fff" stroke-width="2"/><text x="'+x+'" y="'+(y+5)+'" text-anchor="middle" font-family="'+F+'" font-weight="700" font-size="14" fill="#fff">'+t+'</text></g>'; };
+  var txt = function(x, y, t, size, col, extra){ return '<text x="'+x+'" y="'+y+'" text-anchor="middle" font-family="'+F+'" '+(/font-weight/.test(extra||'')?'':'font-weight="600" ')+'font-size="'+(size||12)+'" fill="'+(col||'#6b7a5a')+'" '+(extra||'')+'>'+t+'</text>'; };
+  var COL = {banos:'#7b3fa0', parrilla:'#2f5fd0', caja:'#c62f2f', barra:'#1ea7c9', after:'#ec7a17'};
+  var svg = '<svg viewBox="0 0 600 660" role="img" aria-label="Mapa del evento: canchas de hockey y fútbol, barra, caja, zona del After, baños y parrilla">'
+    // terreno
+    + '<rect width="600" height="660" rx="14" fill="#e4ead6"/>'
+    // calle 25 de Mayo
+    + '<rect x="582" y="0" width="18" height="660" fill="#d3d6cc"/>' + txt(591, 330, '25 de Mayo', 11, '#7d8577', 'transform="rotate(-90 591 330)"')
+    // cancha de rugby (referencia)
+    + '<rect x="0" y="0" width="215" height="190" fill="#cfdcb6"/>' + txt(107, 100, 'Cancha de rugby', 12)
+    // camino y estacionamiento
+    + '<path d="M300 0 L300 300 Q300 345 345 350 L420 350" fill="none" stroke="#efe5cf" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>'
+    + '<path d="M245 330 Q240 430 250 560 Q258 640 240 660" fill="none" stroke="#efe5cf" stroke-width="16" stroke-linecap="round"/>'
+    + '<path d="M455 390 Q470 520 455 660" fill="none" stroke="#efe5cf" stroke-width="14" stroke-linecap="round"/>'
+    // río
+    + '<path d="M262 430 C262 385 330 372 372 388 C420 405 440 450 436 520 C432 590 410 660 395 660 L285 660 C275 610 262 520 262 430 Z" fill="#9cc3cf" stroke="#86b0bf" stroke-width="2"/>'
+    + txt(350, 520, 'Río', 13, '#4f7f90')
+    // canchas de tenis (referencia)
+    + '<rect x="480" y="415" width="94" height="245" rx="4" fill="#e2a786"/>' + txt(527, 470, 'Tenis', 12, '#8a4b2c')
+    // edificio
+    + '<rect x="484" y="320" width="98" height="80" rx="4" fill="#cfc8bb"/>'
+    // arbolitos
+    + bosque()
+    // zona del After
+    + '<path d="M368 302 L470 300 L478 388 L462 391 L436 366 L402 352 L370 336 Z" fill="'+COL.after+'" fill-opacity=".85" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>'
+    // canchas
+    + '<rect x="16" y="252" width="204" height="312" rx="10" fill="#1f6fb2"/>'
+    + anidar(c.hk, 24, 260, 188, 296)
+    + anidar(c.fb, 362, 18, 186, 276)
+    // barra y caja junto a la cancha de hockey
+    + '<rect x="222" y="322" width="22" height="36" rx="3" fill="'+COL.barra+'" stroke="#fff" stroke-width="2"/>'
+    + '<rect x="224" y="364" width="20" height="34" rx="3" fill="'+COL.caja+'" stroke="#fff" stroke-width="2"/>'
+    // baños y parrilla
+    + '<rect x="20" y="584" width="66" height="40" rx="5" fill="'+COL.banos+'" stroke="#fff" stroke-width="2"/>'
+    + '<rect x="90" y="584" width="66" height="40" rx="5" fill="'+COL.parrilla+'" stroke="#fff" stroke-width="2"/>'
+    // etiquetas
+    + '<line x1="244" y1="340" x2="262" y2="318" stroke="'+COL.barra+'" stroke-width="2"/>' + pill(290, 306, 'Barra', COL.barra, 64)
+    + '<line x1="244" y1="381" x2="262" y2="400" stroke="'+COL.caja+'" stroke-width="2"/>' + pill(288, 412, 'Caja', COL.caja, 56)
+    + pill(422, 336, 'After', COL.after, 64)
+    // flecha a vestuarios (entre el río y el tenis, apunta hacia abajo)
+    + '<g class="flecha-vest">'
+    +   '<path d="M446 566 L470 566 L470 618 L486 618 L458 652 L430 618 L446 618 Z" fill="#f5c518" stroke="#173c6f" stroke-width="3" stroke-linejoin="round"/>'
+    + '</g>'
+    + '<g><rect x="404" y="528" width="108" height="30" rx="15" fill="#f5c518" stroke="#173c6f" stroke-width="3"/>'
+    +   '<text x="458" y="548" text-anchor="middle" font-family="'+F+'" font-weight="800" font-size="15" fill="#173c6f">Vestuarios</text></g>'
+    + txt(53, 609, 'Baños', 13, '#fff', 'font-weight="700"') + txt(123, 609, 'Parrilla', 13, '#fff', 'font-weight="700"')
+    + '</svg>';
+  var ley = [['barra','Barra'],['caja','Caja'],['after','Zona del After'],['banos','Baños'],['parrilla','Parrilla']];
+  return '<div class="card mapa-ev"><h2>Mapa del evento</h2>' + svg
+    + '<div class="ley">' + ley.map(function(x){ return '<span><i style="background:'+COL[x[0]]+'"></i>'+x[1]+'</span>'; }).join('') + '<span><i style="background:#f5c518"></i>Hacia vestuarios</span>'
+    + '<span><i style="background:#2a86c9"></i>Hockey 1 y 2</span><span><i style="background:#2e8139"></i>Fútbol 1 a 4</span></div></div>';
+}
 function rInicio(){
   var avisos = D.avisos.length ? D.avisos.map(function(a){
     return '<div class="card aviso'+(a.fijado===true||a.fijado==='TRUE'?' fijo':'')+'"><h3>'+(a.fijado===true||a.fijado==='TRUE'?'📌 ':'')+esc(a.titulo)+'</h3><div class="fecha">'+esc(a.fecha)+'</div><p>'+esc(a.texto)+'</p></div>';
   }).join('') : '<div class="card vacio"><span class="disp">Sin novedades</span>Acá vamos a publicar horarios, cambios y resultados.</div>';
   var abierta = cfg('inscripcionAbierta') === 'si';
   $('#s-inicio').innerHTML =
-    (abierta ? '<div class="card row" style="justify-content:space-between"><div><h2 style="margin:0">Inscripción abierta</h2><div class="muted small">Equipos mixtos · desde '+esc(cfg('minJugadores'))+' jugadores, sin límite</div></div><button class="btn verde" onclick="irA(\'inscripcion\')">Anotar equipo</button></div>'
+    mapaEvento()
+    + (abierta ? '<div class="card row" style="justify-content:space-between"><div><h2 style="margin:0">Inscripción abierta</h2><div class="muted small">Equipos mixtos · desde '+esc(cfg('minJugadores'))+' jugadores, sin límite</div></div><button class="btn verde" onclick="irA(\'inscripcion\')">Anotar equipo</button></div>'
              : '<div class="card"><h2 style="margin:0">Inscripción cerrada</h2></div>')
     + infoTorneo()
     + '<h2 style="margin:18px 0 10px">Avisos</h2>' + avisos
@@ -616,12 +740,20 @@ function ganador(p){
   if(p.pl!==''&&p.pv!==''&&p.pl!=null&&+p.pl!==+p.pv) return +p.pl>+p.pv ? 'L' : 'V';
   return 'E';
 }
+function canchaTxt(c){ c = String(c==null?'':c); return /^\d+$/.test(c) ? 'Cancha '+c : c; }
+function faseTxt(p){ return p.zona || String(p.fase||'').replace(/ · (Semi|Final)$/, function(m,x){ return x==='Semi' ? ' · semi' : ' · final'; }); }
+function canchaOrden(c){ c = String(c||''); var t = /^hockey/i.test(c) ? 0 : /^f[uú]tbol/i.test(c) ? 1 : /^mesa/i.test(c) ? 2 : 3; return t*100 + (parseInt(c.replace(/\D/g,''),10)||0); }
+function encabezadoTurno(g){
+  if(g.every(function(p){ return p.fase==='Zona'; })) return 'Fase de grupos';
+  var t = {}; g.forEach(function(p){ var m = / · (Semi|Final)$/.exec(p.fase||''); t[m ? (m[1]==='Semi'?'Semifinales':'Finales') : (p.fase==='Zona'?'Fase de grupos':p.fase)] = 1; });
+  return Object.keys(t).join(' · ');
+}
 function htmlPartido(p){
   var L = etiqueta(p,'L'), V = etiqueta(p,'V'), g = ganador(p);
   var jugado = p.gl!=='' && p.gl!=null;
   var mio = miEquipo && (p.local===miEquipo || p.visitante===miEquipo);
   var pen = (jugado && p.pl!=='' && p.pl!=null) ? '<span class="pen">pen. '+p.pl+'-'+p.pv+'</span>' : '';
-  return '<div class="partido'+(mio?' mio':'')+'"><div class="cancha">Cancha '+esc(p.cancha)+'<b>'+esc(p.zona||p.fase)+'</b></div>'
+  return '<div class="partido'+(mio?' mio':'')+'"><div class="cancha">'+esc(canchaTxt(p.cancha))+'<b>'+esc(faseTxt(p))+'</b></div>'
     + '<div class="eq'+(L.lab?' lab':'')+(g==='L'?' gana':'')+'">'+esc(L.t)+'</div>'
     + (jugado ? '<div class="res">'+p.gl+' - '+p.gv+pen+'</div>' : '<div class="res vs">vs</div>')
     + '<div class="eq v'+(V.lab?' lab':'')+(g==='V'?' gana':'')+'">'+esc(V.t)+'</div></div>';
@@ -629,18 +761,76 @@ function htmlPartido(p){
 function agruparTurnos(ps){
   var t = {};
   ps.forEach(function(p){ (t[p.turno] = t[p.turno] || []).push(p); });
-  return Object.keys(t).sort(function(a,b){return a-b;}).map(function(k){ return t[k].sort(function(a,b){return a.cancha-b.cancha;}); });
+  return Object.keys(t).sort(function(a,b){return a-b;}).map(function(k){ return t[k].sort(function(a,b){return canchaOrden(a.cancha)-canchaOrden(b.cancha);}); });
+}
+function mapasCanchas(soloSvg){
+  var W = '#fff', L = 'rgba(255,255,255,.38)';
+  var lbl = function(x,y,t){ return '<g><rect x="'+(x-46)+'" y="'+(y-13)+'" width="92" height="26" rx="13" fill="#173c6f"/><text x="'+x+'" y="'+(y+5)+'" text-anchor="middle" font-family="Barlow,system-ui,sans-serif" font-weight="700" font-size="14" fill="#fff">'+t+'</text></g>'; };
+  // Hockey: cancha grande horizontal, dividida en 2 mitades que se juegan a lo ancho (arcos sobre los laterales)
+  var hk = '<svg viewBox="0 0 252 400" role="img" aria-label="Cancha de hockey dividida en Hockey 1 y Hockey 2, cada mitad se juega a lo ancho"><g transform="translate(252,0) rotate(90)">'
+    + '<rect x="0" y="0" width="400" height="252" rx="10" fill="#1f6fb2"/>'
+    + '<rect x="12" y="12" width="376" height="228" fill="#2a86c9" stroke="'+W+'" stroke-width="2"/>'
+    // líneas originales de la cancha grande (de fondo): áreas, líneas de 23 m, punto penal y arcos
+    + '<g stroke="'+L+'" stroke-width="2" fill="none">'
+    +   '<path d="M12 66 A60 60 0 0 1 12 186"/><path d="M388 66 A60 60 0 0 0 388 186"/>'
+    +   '<path d="M12 46 A80 80 0 0 1 12 206" stroke-dasharray="6 6"/><path d="M388 46 A80 80 0 0 0 388 206" stroke-dasharray="6 6"/>'
+    +   '<line x1="107" y1="12" x2="107" y2="240"/><line x1="293" y1="12" x2="293" y2="240"/>'
+    + '</g>'
+    + '<circle cx="42" cy="126" r="2.5" fill="'+L+'"/><circle cx="358" cy="126" r="2.5" fill="'+L+'"/>'
+    + '<rect x="5" y="118" width="7" height="16" fill="'+L+'"/><rect x="388" y="118" width="7" height="16" fill="'+L+'"/>'
+    // división
+    + '<line x1="200" y1="12" x2="200" y2="240" stroke="#fff" stroke-width="4"/>'
+    // cada mitad: arcos arriba y abajo + áreas
+    + [106,294].map(function(cx){
+        return '<path d="M'+(cx-42)+' 12 A42 42 0 0 0 '+(cx+42)+' 12" fill="none" stroke="'+W+'" stroke-width="2"/>'
+          + '<path d="M'+(cx-42)+' 240 A42 42 0 0 1 '+(cx+42)+' 240" fill="none" stroke="'+W+'" stroke-width="2"/>'
+          + '<rect x="'+(cx-10)+'" y="4" width="20" height="8" fill="#fff"/><rect x="'+(cx-10)+'" y="240" width="20" height="8" fill="#fff"/>';
+      }).join('')
+    + '</g>' + lbl(126,106,'Hockey 2') + lbl(126,294,'Hockey 1')
+    + '</svg>';
+  // Fútbol: cancha de 11 horizontal dividida en 4, misma orientación (arcos a izquierda y derecha de cada cancha)
+  var fq = [[106,71,'Fútbol 4'],[294,71,'Fútbol 2'],[106,183,'Fútbol 3'],[294,183,'Fútbol 1']];
+  var fb = '<svg viewBox="0 0 254 400" role="img" aria-label="Cancha de fútbol 11 dividida en cuatro: Fútbol 1 a 4, misma orientación"><g transform="translate(254,0) rotate(90)">'
+    + '<rect x="0" y="0" width="400" height="254" rx="10" fill="#2e8139"/>'
+    + [0,1,2,3,4,5,6,7].map(function(i){ return '<rect x="'+(12+i*47)+'" y="12" width="23.5" height="230" fill="rgba(255,255,255,.06)"/>'; }).join('')
+    + '<rect x="12" y="12" width="376" height="230" fill="none" stroke="'+W+'" stroke-width="2"/>'
+    // líneas originales de la cancha de 11 (de fondo)
+    + '<g stroke="'+L+'" stroke-width="2" fill="none">'
+    +   '<circle cx="200" cy="127" r="33"/>'
+    +   '<rect x="12" y="59" width="59" height="136"/><rect x="329" y="59" width="59" height="136"/>'
+    +   '<rect x="12" y="96" width="20" height="62"/><rect x="368" y="96" width="20" height="62"/>'
+    +   '<path d="M71 105 A33 33 0 0 1 71 149"/><path d="M329 105 A33 33 0 0 0 329 149"/>'
+    + '</g>'
+    + '<circle cx="200" cy="127" r="2.5" fill="'+L+'"/><circle cx="51" cy="127" r="2.5" fill="'+L+'"/><circle cx="349" cy="127" r="2.5" fill="'+L+'"/>'
+    + '<rect x="5" y="115" width="7" height="24" fill="'+L+'"/><rect x="388" y="115" width="7" height="24" fill="'+L+'"/>'
+    // divisiones
+    + '<line x1="200" y1="12" x2="200" y2="242" stroke="#fff" stroke-width="4"/>'
+    + '<line x1="12" y1="127" x2="388" y2="127" stroke="#fff" stroke-width="4"/>'
+    // arcos de cada cancha chica (izquierda y derecha)
+    + fq.map(function(q){
+        var cx=q[0], cy=q[1], x0=cx-88, x1=cx+88;
+        return '<rect x="'+(x0-1)+'" y="'+(cy-10)+'" width="7" height="20" fill="#fff"/><rect x="'+(x1-6)+'" y="'+(cy-10)+'" width="7" height="20" fill="#fff"/>'
+          + '<path d="M'+x0+' '+(cy-24)+' L'+(x0+22)+' '+(cy-24)+' L'+(x0+22)+' '+(cy+24)+' L'+x0+' '+(cy+24)+'" fill="none" stroke="'+W+'" stroke-width="1.5"/>'
+          + '<path d="M'+x1+' '+(cy-24)+' L'+(x1-22)+' '+(cy-24)+' L'+(x1-22)+' '+(cy+24)+' L'+x1+' '+(cy+24)+'" fill="none" stroke="'+W+'" stroke-width="1.5"/>';
+      }).join('')
+    + '</g>' + fq.map(function(q){ return lbl(254-q[1], q[0], q[2]); }).join('')
+    + '</svg>';
+  if(soloSvg) return {hk:hk, fb:fb};
+  return '<div class="mapas">'
+    + '<div class="mapa"><h3>Canchas de hockey</h3>'+hk+'<div class="nota">La cancha grande se divide al medio. Cada mitad se juega <b>a lo ancho</b>: los arcos van sobre los laterales de la cancha grande.</div></div>'
+    + '<div class="mapa"><h3>Canchas de fútbol</h3>'+fb+'<div class="nota">La cancha de fútbol 11 se divide en 4. Se juega <b>en el mismo sentido</b> que la cancha grande.</div></div>'
+    + '</div>';
 }
 function rFixture(){
   var s = $('#s-fixture');
-  if(!D.partidos.length){ s.innerHTML = '<div class="card vacio"><span class="disp">Fixture en armado</span>Lo publicamos cuando cierre la inscripción.</div>'; return; }
+  if(!D.partidos.length){ s.innerHTML = mapasCanchas() + '<div class="card vacio"><span class="disp">Fixture en armado</span>Lo publicamos cuando cierre la inscripción.</div>'; return; }
   var eqs = D.equipos.slice().sort(function(a,b){return a.nombre.localeCompare(b.nombre);});
   var ps = D.partidos.filter(function(p){ return !miEquipo || p.local===miEquipo || p.visitante===miEquipo || !p.local; });
-  s.innerHTML = '<div class="card"><label for="f-eq" style="margin-top:0">Ver mi equipo</label><select id="f-eq"><option value="">Todos los partidos</option>'
+  s.innerHTML = mapasCanchas() + '<div class="card"><label for="f-eq" style="margin-top:0">Ver mi equipo</label><select id="f-eq"><option value="">Todos los partidos</option>'
     + eqs.map(function(e){ return '<option value="'+esc(e.id)+'"'+(e.id===miEquipo?' selected':'')+'>'+esc(e.nombre)+'</option>'; }).join('') + '</select>'
     + (miEquipo ? '<div class="muted small" style="margin-top:6px">Mostrando los partidos de tu equipo y los cruces a definir.</div>' : '') + '</div>'
     + agruparTurnos(ps).map(function(g){
-      return '<div class="turno"><div class="turno-h"><span class="hora">'+esc(g[0].hora)+'</span><span class="fase">Turno '+esc(g[0].turno)+' · '+esc(g[0].fase)+'</span></div>' + g.map(htmlPartido).join('') + '</div>';
+      return '<div class="turno"><div class="turno-h"><span class="hora">'+esc(g[0].hora)+'</span><span class="fase">Turno '+esc(g[0].turno)+' · '+esc(encabezadoTurno(g))+'</span></div>' + g.map(htmlPartido).join('') + '</div>';
     }).join('');
   $('#f-eq').onchange = function(){ miEquipo = this.value; try{ localStorage.setItem('naecitu-mi-equipo', miEquipo); }catch(e){} rFixture(); };
 }
@@ -682,7 +872,7 @@ function rPosiciones(){
       + '</tbody></table></div></div>';
   }).join('')
   + (po.length ? '<div class="card"><h2>Definición</h2>' + po.map(htmlPartido).join('') + '</div>' : '')
-  + '<p class="muted small">Desempate: puntos, diferencia de gol, goles a favor.</p>';
+  + '<p class="muted small">La tabla de cada grupo junta los partidos de hockey y de fútbol: 3 puntos por ganar y 1 por empatar, en los dos deportes. Desempate: puntos, diferencia de gol, goles a favor.</p>';
 }
 
 /* ============ Resolver cruces (admin) ============ */
@@ -812,7 +1002,7 @@ function aResultados(cont, modo){
     + agruparTurnos(datos.partidos).map(function(g){
       return '<div class="turno-h"><span class="hora">'+esc(g[0].hora)+'</span><span class="fase">Turno '+g[0].turno+'</span></div>' + g.map(function(p){
         var L = etiqueta(p,'L'), V = etiqueta(p,'V'), po = p.fase!=='Zona';
-        return '<div class="card" style="padding:10px;margin-bottom:6px"><div class="muted small">'+esc(p.id)+' · Cancha '+esc(p.cancha)+' · '+esc(p.zona||p.fase)+'</div>'
+        return '<div class="card" style="padding:10px;margin-bottom:6px"><div class="muted small">'+esc(p.id)+' · '+esc(canchaTxt(p.cancha))+' · '+esc(faseTxt(p))+(/^mesa/i.test(String(p.cancha)) ? ' · <b>Beer pong: cargá 1 al que ganó y 0 al que perdió</b>' : '')+'</div>'
           + '<div class="adm-res" data-id="'+esc(p.id)+'"><div class="small" style="text-align:right;font-weight:700">'+esc(L.t)+'</div>'
           + '<input type="number" min="0" inputmode="numeric" value="'+esc(p.gl)+'" data-k="gl" aria-label="Goles '+esc(L.t)+'"><input type="number" min="0" inputmode="numeric" value="'+esc(p.gv)+'" data-k="gv" aria-label="Goles '+esc(V.t)+'">'
           + '<div class="small" style="font-weight:700">'+esc(V.t)+'</div></div>'
